@@ -31,22 +31,31 @@ function findBookWithTheHighestOrLowestNumOfPages() {
 findBookWithTheHighestOrLowestNumOfPages();
 
 // 	* została wydana najwcześniej
-// books.map(book => console.log(new Date(book.releaseDate)))
-
 function findBookWithTheEarliestDate() {
+    const pagesArr = [];
 
+    books.map(book => pagesArr.push(Date.parse(new Date(book.releaseDate))));
+    const theEarliestReleaseDate = Math.min.apply(null, pagesArr);
+
+    const getTheBookWithTheEarliestDate = books.find(book => {
+        let releaseDate = Date.parse(new Date(book.releaseDate));
+        return releaseDate === theEarliestReleaseDate;
+    })
+
+    return getTheBookWithTheEarliestDate;
 }
 
+findBookWithTheEarliestDate();
 
 // 2. Znajdź książki które:
 // 	* są wydane pomiędzy dwiema wybranymi datami,
 function findBooksBetweenChosenDates() {
     const filteredRageDateBooks = [];
-    const dateFrom = new Date('August 19, 1983 10:15:30').getFullYear();
-    const dateTo = new Date('August 25, 1986 10:15:30').getFullYear();
+    const dateFrom = new Date('January 19, 1983 10:15:30');
+    const dateTo = new Date('August 25, 1986 10:15:30');
 
     for (let i = 0; i < books.length; i++) {
-        let bookReleaseDate = new Date(books[i].releaseDate).getFullYear();
+        let bookReleaseDate = new Date(books[i].releaseDate);
         if (bookReleaseDate >= dateFrom && bookReleaseDate <= dateTo) {
             filteredRageDateBooks.push(books[i]);
         }
