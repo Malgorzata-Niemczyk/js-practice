@@ -113,6 +113,21 @@ findAllBoughtBooks();
 // 		ss: Seconds (00 to 59)
 // 		sss: Milliseconds (0 to 999)
 
+function formatReleaseDate() {
+    let fourDigitYear = books.map(book => (new Date(book.releaseDate)).getFullYear());
+    let monthFrom1To12 = books.map(book => (new Date(book.releaseDate)).getMonth() + 1);
+    let hour24digit = books.map(book => (new Date(book.releaseDate)).getHours());
+
+    return {
+        fourDigitYear,
+        monthFrom1To12,
+        hour24digit,
+    }
+    
+}
+
+formatReleaseDate();
+
 // 	* sortowane wg podanego pola i kierunku sortowania
 
 }
