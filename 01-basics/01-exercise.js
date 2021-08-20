@@ -39,12 +39,8 @@ findBookWithTheHighestOrLowestNumOfPages();
 let greaterThanSearchedRating = [];
 
 const findgGreaterThanSearchedRating = () => {
-    for (let i = 0; i < books.length; i++) {
-        if (books[i].rating < 2 || books[i].rating > 4) {
-            greaterThanSearchedRating.push(books[i]);
-            return greaterThanSearchedRating
-        }
-    }
+    const booksWithFilteredRading = books.filter(book => book.rating < 2 || books.rating > 4);
+    return booksWithFilteredRading;
 }
 
 findgGreaterThanSearchedRating();
@@ -53,7 +49,6 @@ findgGreaterThanSearchedRating();
 let pageRangeBooks = [];
 
 const findBookInPageRange = () => {
-    
     const filteredBook = books.filter(book => book.pages >= 700 && book.pages <= 920);
     return filteredBook;
 }
@@ -61,19 +56,20 @@ const findBookInPageRange = () => {
 findBookInPageRange();
 
 // 	* wszystkie kupione
-let allBoughtBooks = [];
-
 function findAllBoughtBooks() {
+    const allBoughtBooks = [];
 
     for (let book of books) {
         if (book.bought === true) {
             allBoughtBooks.push(book);
-            return allBoughtBooks;
         }
     }
+
+    return allBoughtBooks;
 }
 
 findAllBoughtBooks();
+console.log(findAllBoughtBooks())
 
 
 // 3. Przetwórz dane tak aby:
