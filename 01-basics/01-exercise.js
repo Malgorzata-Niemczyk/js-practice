@@ -54,12 +54,8 @@ let pageRangeBooks = [];
 
 const findBookInPageRange = () => {
     
-    books.map(book => {
-        if (book.pages >= 700 && book.pages <= 920) {
-            pageRangeBooks.push(book);
-            return pageRangeBooks;
-        }
-    })
+    const filteredBook = books.filter(book => book.pages >= 700 && book.pages <= 920);
+    return filteredBook;
 }
 
 findBookInPageRange();
