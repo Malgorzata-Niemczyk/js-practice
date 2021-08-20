@@ -12,11 +12,42 @@ requestURL.onload = () => {
 //     1. Znajdź książkę która:
 // 	* ma najwięcej stron
 // 	* ma najmniej stron,
+function findBookWithTheHighestOrLowestNumOfPages() {
+    const pagesArr = [];
+
+    books.map(book => pagesArr.push(book.pages));
+    const highestNum = Math.max(...pagesArr);
+    const lowestNum = Math.min(...pagesArr);
+
+    const foundBookWithTheHighestPages = books.find(book => book.pages === highestNum);
+    const foundBookWithTheLowestPages = books.find(book => book.pages === lowestNum);
+
+    return {
+        foundBookWithTheHighestPages,
+        foundBookWithTheLowestPages
+    }    
+}
+
+findBookWithTheHighestOrLowestNumOfPages();
+
 // 	* została wydana najwcześniej
 
 // 2. Znajdź książki które:
 // 	* są wydane pomiędzy dwiema wybranymi datami,
+
 // 	* mają rating większy/mniejszy niż szukany,
+let greaterThanSearchedRating = [];
+
+const findgGreaterThanSearchedRating = () => {
+    for (let i = 0; i < books.length; i++) {
+        if (books[i].rating < 2 || books[i].rating > 4) {
+            greaterThanSearchedRating.push(books[i]);
+            return greaterThanSearchedRating
+        }
+    }
+}
+
+findgGreaterThanSearchedRating();
 
 // 	* mają ilość stron w podanym przedziale,
 let pageRangeBooks = [];
@@ -31,7 +62,7 @@ const findBookInPageRange = () => {
     })
 }
 
-findBookInPageRange()
+findBookInPageRange();
 
 // 	* wszystkie kupione
 let allBoughtBooks = [];
@@ -46,7 +77,7 @@ function findAllBoughtBooks() {
     }
 }
 
-findAllBoughtBooks()
+findAllBoughtBooks();
 
 
 // 3. Przetwórz dane tak aby:
