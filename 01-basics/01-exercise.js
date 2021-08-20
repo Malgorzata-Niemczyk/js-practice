@@ -31,9 +31,31 @@ function findBookWithTheHighestOrLowestNumOfPages() {
 findBookWithTheHighestOrLowestNumOfPages();
 
 // 	* została wydana najwcześniej
+// books.map(book => console.log(new Date(book.releaseDate)))
+
+function findBookWithTheEarliestDate() {
+
+}
+
 
 // 2. Znajdź książki które:
 // 	* są wydane pomiędzy dwiema wybranymi datami,
+function findBooksBetweenChosenDates() {
+    const filteredRageDateBooks = [];
+    const dateFrom = new Date('August 19, 1983 10:15:30').getFullYear();
+    const dateTo = new Date('August 25, 1986 10:15:30').getFullYear();
+
+    for (let i = 0; i < books.length; i++) {
+        let bookReleaseDate = new Date(books[i].releaseDate).getFullYear();
+        if (bookReleaseDate >= dateFrom && bookReleaseDate <= dateTo) {
+            filteredRageDateBooks.push(books[i]);
+        }
+    }
+
+    return filteredRageDateBooks;
+}
+
+findBooksBetweenChosenDates();
 
 // 	* mają rating większy/mniejszy niż szukany,
 const findgGreaterThanSearchedRating = () => {
