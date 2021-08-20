@@ -36,8 +36,6 @@ findBookWithTheHighestOrLowestNumOfPages();
 // 	* są wydane pomiędzy dwiema wybranymi datami,
 
 // 	* mają rating większy/mniejszy niż szukany,
-let greaterThanSearchedRating = [];
-
 const findgGreaterThanSearchedRating = () => {
     const booksWithFilteredRading = books.filter(book => book.rating < 2 || books.rating > 4);
     return booksWithFilteredRading;
@@ -46,8 +44,6 @@ const findgGreaterThanSearchedRating = () => {
 findgGreaterThanSearchedRating();
 
 // 	* mają ilość stron w podanym przedziale,
-let pageRangeBooks = [];
-
 const findBookInPageRange = () => {
     const filteredBook = books.filter(book => book.pages >= 700 && book.pages <= 920);
     return filteredBook;
@@ -69,8 +65,6 @@ function findAllBoughtBooks() {
 }
 
 findAllBoughtBooks();
-console.log(findAllBoughtBooks())
-
 
 // 3. Przetwórz dane tak aby:
 // 	* powstały array obiektów grupujących książki ze względu na currency (schemat {[currency: string]: Book[]}[])
