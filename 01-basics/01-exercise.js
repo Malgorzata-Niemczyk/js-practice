@@ -9,183 +9,163 @@ requestURL.onload = () => {
     const books = requestURL.response;
     // console.log(books);
 
-//     1. Znajdź książkę która:
-// 	* ma najwięcej stron
-// 	* ma najmniej stron,
-function findBooksWithTheLowestNumOfPages(arr) {
-    const pagesArr = [];
+    //     1. Znajdź książkę która:
+    // 	* ma najmniej stron,
+    function findBooksWithTheLowestNumOfPages(arr) {
+        const pagesArr = [];
 
-    arr.forEach(item => pagesArr.push(item.pages));
-    const lowestNum = Math.min(...pagesArr);
+        arr.forEach(item => pagesArr.push(item.pages));
+        const lowestNum = Math.min(...pagesArr);
 
-    const foundBooksWithTheLowestPages = arr.filter(item => item.pages === lowestNum);
-    return foundBooksWithTheLowestPages;
-}
-findBooksWithTheLowestNumOfPages(books);
-
-
-function findBooksWithTheHighestNumOfPages(arr) {
-    const pagesArr = [];
-
-    arr.forEach(item => pagesArr.push(item.pages));
-    const highestNum = Math.max(...pagesArr);
-
-    const foundBookWithTheHighestPages = arr.filter(item => item.pages === highestNum);
-    return foundBookWithTheHighestPages;   
-}
-findBooksWithTheHighestNumOfPages(books);
-
-// 	* została wydana najwcześniej
-function findBookWithTheEarliestDate(arr) {
-    const datesArr = [];
-    arr.forEach(item => datesArr.push(Date.parse(item.releaseDate)));
-    const theEarliestReleaseDate = Math.min(...datesArr);
-
-    const getTheBookWithTheEarliestDate = arr.filter(item => {
-        let releaseDate = Date.parse(item.releaseDate);
-        return releaseDate === theEarliestReleaseDate;
-    })
-
-    return getTheBookWithTheEarliestDate;
-}
-
-findBookWithTheEarliestDate(books);
-
-// 2. Znajdź książki które:
-// 	* są wydane pomiędzy dwiema wybranymi datami,
-function findBooksBetweenChosenDates() {
-    const filteredRageDateBooks = [];
-    const dateFrom = new Date('January 19, 1983 10:15:30');
-    const dateTo = new Date('August 25, 1986 10:15:30');
-
-    for (let i = 0; i < books.length; i++) {
-        let bookReleaseDate = new Date(books[i].releaseDate);
-        if (bookReleaseDate >= dateFrom && bookReleaseDate <= dateTo) {
-            filteredRageDateBooks.push(books[i]);
-        }
-    }
-
-    return filteredRageDateBooks;
-}
-
-findBooksBetweenChosenDates();
-
-// 	* mają rating większy/mniejszy niż szukany,
-const findgGreaterThanSearchedRating = () => {
-    const booksWithFilteredRading = books.filter(book => book.rating < 2 || books.rating > 4);
-    return booksWithFilteredRading;
-}
-
-findgGreaterThanSearchedRating();
-
-// 	* mają ilość stron w podanym przedziale,
-const findBookInPageRange = () => {
-    const filteredBook = books.filter(book => book.pages >= 700 && book.pages <= 920);
-    return filteredBook;
-}
-
-findBookInPageRange();
-
-// 	* wszystkie kupione
-function findAllBoughtBooks() {
-    const allBoughtBooks = [];
-
-    for (let book of books) {
-        if (book.bought) {
-            allBoughtBooks.push(book);
-        }
-    }
-
-    return allBoughtBooks;
-}
-
-findAllBoughtBooks();
-
-// 3. Przetwórz dane tak aby:
-// 	* powstały array obiektów grupujących książki ze względu na currency (schemat {[currency: string]: Book[]})
-
-// 	* otrzymać listę unikalnych nazwisk autorów,
-
-// 	* releaseDate była zmieniona w dowolny inny format docelowe formaty: 
-// 		YYYY: 4-digit year *
-// 		YY: 2-digit year
-// 		MM: 2-digit month (where January is 01 and December is 12) *
-// 		M: month from 1 to 12 *
-// 		DD: 2-digit date (01 to 31) *
-// 		dd: 2-digit date (1 to 31) *
-// 		HH: 24-digit hour (0 to 23) *
-// 		hh: 12-digit hour (0 to 12) (need to add AM/PM)
-// 		mm: Minutes (00 to 59) *
-// 		ss: Seconds (00 to 59) *
-// 		sss: Milliseconds (0 to 999)
-
-function formatReleaseDate() {
-    let fourDigitYear = books.map(book => new Date(book.releaseDate).getFullYear());
-
-    let monthFrom1To12 = books.map(book => new Date(book.releaseDate).getMonth() + 1);
-
-    let twoDigitMonth = books.map(book => {
-        return new Date(book.releaseDate).getMonth() + 1 < 10
-                ? `0${new Date(book.releaseDate).getMonth() + 1}`
-                :new Date(book.releaseDate).getMonth() + 1
-    });
-    let date = books.map(book => new Date(book.releaseDate).getDate());
-
-    let twoDigitDate = books.map(book => {
-        return new Date(book.releaseDate).getDate() < 10
-                ? `0${new Date(book.releaseDate).getDate()}`
-                : new Date(book.releaseDate).getDate()
-    });
-
-    let hour24digit = books.map(book => new Date(book.releaseDate).getHours());
-
-    let minutes = books.map(book => {
-        return new Date(book.releaseDate).getMinutes() < 10
-                ? `0${new Date(book.releaseDate).getMinutes()}`
-                : new Date(book.releaseDate).getMinutes()
-    });
-
-    let seconds = books.map(book => {
-        return new Date(book.releaseDate).getSeconds() < 10
-                ? `0${new Date(book.releaseDate).getSeconds()}`
-                : new Date(book.releaseDate).getSeconds()
-    });
-
-    return {
-        fourDigitYear,
-        monthFrom1To12,
-        twoDigitMonth,
-        date,
-        twoDigitDate,
-        hour24digit,
-        minutes,
-        seconds
+        return arr.filter(item => item.pages === lowestNum);
     }
     
-}
+    findBooksWithTheLowestNumOfPages(books);
 
-formatReleaseDate();
+     //  * ma najwięcej stron
+    function findBooksWithTheHighestNumOfPages(arr) {
+        const pagesArr = [];
 
-// 	* sortowane wg podanego pola i kierunku sortowania
-function sortedBooksbyAuthorSurname() {
-    const sortedBooks = books.sort((a, b) => {
-        let authorOne = a.author.surname.toLowerCase();
-        let authorTwo = b.author.surname.toLowerCase();
+        arr.forEach(item => pagesArr.push(item.pages));
+        const highestNum = Math.max(...pagesArr);
 
-        if (authorOne > authorTwo) {
-            return 1;
-        } 
+        return arr.filter(item => item.pages === highestNum);  
+    }
 
-        if (authorOne < authorTwo) {
-            return -1;
+    findBooksWithTheHighestNumOfPages(books);
+
+    // 	* została wydana najwcześniej
+    function findBookWithTheEarliestDate(arr) {
+        const datesArr = [];
+        arr.forEach(item => datesArr.push(Date.parse(item.releaseDate)));
+        const theEarliestReleaseDate = Math.min(...datesArr);
+
+        const getTheBookWithTheEarliestDate = arr.filter(item => {
+            let releaseDate = Date.parse(item.releaseDate);
+            return releaseDate === theEarliestReleaseDate;
+        })
+
+        return getTheBookWithTheEarliestDate;
+    }
+
+    findBookWithTheEarliestDate(books);
+
+    // 2. Znajdź książki które:
+    // 	* są wydane pomiędzy dwiema wybranymi datami,
+    function findBooksBetweenChosenDates(arr, dateFrom, dateTo) {
+        return arr.filter(item => {
+            return Date.parse(item.releaseDate) >= Date.parse(dateFrom) && Date.parse(item.releaseDate) <= Date.parse(dateTo);
+        })
+    }
+
+    findBooksBetweenChosenDates(books, new Date('January 19, 1983 10:15:30'), new Date('August 25, 1986 10:15:30'));
+
+    // 	* mają rating większy/mniejszy niż szukany,
+    const findgGreaterThanSearchedRating = (arr, ratingLowerThanSearched, ratingHigherThanSearched) => {
+        return arr.filter(item => item.rating < ratingLowerThanSearched || item.rating > ratingHigherThanSearched);
+    }
+
+    findgGreaterThanSearchedRating(books, 2, 4);
+
+    // 	* mają ilość stron w podanym przedziale,
+    const findBookInPageRange = (arr, pageFrom, pageTo) => {
+        return arr.filter(item => item.pages >= pageFrom && item.pages <= pageTo);
+    }
+
+    findBookInPageRange(books, 720, 900);
+
+    // 	* wszystkie kupione
+    function findAllBoughtBooks(arr) {
+        return arr.filter(item => item.bought);
+    }
+
+    findAllBoughtBooks(books);
+
+    // 3. Przetwórz dane tak aby:
+    // 	* powstały array obiektów grupujących książki ze względu na currency (schemat {[currency: string]: Book[]})
+
+    // 	* otrzymać listę unikalnych nazwisk autorów,
+
+    // 	* releaseDate była zmieniona w dowolny inny format docelowe formaty: 
+    // 		YYYY: 4-digit year *
+    // 		YY: 2-digit year
+    // 		MM: 2-digit month (where January is 01 and December is 12) *
+    // 		M: month from 1 to 12 *
+    // 		DD: 2-digit date (01 to 31) *
+    // 		dd: 2-digit date (1 to 31) *
+    // 		HH: 24-digit hour (0 to 23) *
+    // 		hh: 12-digit hour (0 to 12) (need to add AM/PM)
+    // 		mm: Minutes (00 to 59) *
+    // 		ss: Seconds (00 to 59) *
+    // 		sss: Milliseconds (0 to 999)
+
+    function formatReleaseDate() {
+        let fourDigitYear = books.map(book => new Date(book.releaseDate).getFullYear());
+
+        let monthFrom1To12 = books.map(book => new Date(book.releaseDate).getMonth() + 1);
+
+        let twoDigitMonth = books.map(book => {
+            return new Date(book.releaseDate).getMonth() + 1 < 10
+                    ? `0${new Date(book.releaseDate).getMonth() + 1}`
+                    :new Date(book.releaseDate).getMonth() + 1
+        });
+        let date = books.map(book => new Date(book.releaseDate).getDate());
+
+        let twoDigitDate = books.map(book => {
+            return new Date(book.releaseDate).getDate() < 10
+                    ? `0${new Date(book.releaseDate).getDate()}`
+                    : new Date(book.releaseDate).getDate()
+        });
+
+        let hour24digit = books.map(book => new Date(book.releaseDate).getHours());
+
+        let minutes = books.map(book => {
+            return new Date(book.releaseDate).getMinutes() < 10
+                    ? `0${new Date(book.releaseDate).getMinutes()}`
+                    : new Date(book.releaseDate).getMinutes()
+        });
+
+        let seconds = books.map(book => {
+            return new Date(book.releaseDate).getSeconds() < 10
+                    ? `0${new Date(book.releaseDate).getSeconds()}`
+                    : new Date(book.releaseDate).getSeconds()
+        });
+
+        return {
+            fourDigitYear,
+            monthFrom1To12,
+            twoDigitMonth,
+            date,
+            twoDigitDate,
+            hour24digit,
+            minutes,
+            seconds
         }
+        
+    }
 
-        return 0;
-    })
+    formatReleaseDate();
 
-    return sortedBooks;
-}
+    // 	* sortowane wg podanego pola i kierunku sortowania
+    function sortedBooksbyAuthorSurname() {
+        const sortedBooks = books.sort((a, b) => {
+            let authorOne = a.author.surname.toLowerCase();
+            let authorTwo = b.author.surname.toLowerCase();
 
-sortedBooksbyAuthorSurname();
+            if (authorOne > authorTwo) {
+                return 1;
+            } 
+
+            if (authorOne < authorTwo) {
+                return -1;
+            }
+
+            return 0;
+        })
+
+        return sortedBooks;
+    }
+
+    sortedBooksbyAuthorSurname();
 
 }
