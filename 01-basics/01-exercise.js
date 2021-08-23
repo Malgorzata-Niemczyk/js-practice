@@ -147,25 +147,24 @@ requestURL.onload = () => {
     formatReleaseDate();
 
     // 	* sortowane wg podanego pola i kierunku sortowania
-    function sortedBooksbyAuthorSurname() {
-        const sortedBooks = books.sort((a, b) => {
-            let authorOne = a.author.surname.toLowerCase();
-            let authorTwo = b.author.surname.toLowerCase();
+    function sortedBooksbyAuthorSurname(arr) {
+        const sortedBooks = [...arr].sort((a, b) => {
+            let authorOne = a.author.surname.toLocaleLowerCase();
+            let authorTwo = b.author.surname.toLocaleLowerCase();
 
             if (authorOne > authorTwo) {
                 return 1;
-            } 
-
-            if (authorOne < authorTwo) {
+            } else if (authorOne < authorTwo) {
                 return -1;
+            } else {
+                return 0;
             }
 
-            return 0;
         })
 
         return sortedBooks;
     }
 
-    sortedBooksbyAuthorSurname();
+    sortedBooksbyAuthorSurname(books);
 
 }
