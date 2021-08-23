@@ -36,21 +36,20 @@ function findBooksWithTheHighestNumOfPages(arr) {
 findBooksWithTheHighestNumOfPages(books);
 
 // 	* została wydana najwcześniej
-function findBookWithTheEarliestDate() {
-    const pagesArr = [];
+function findBookWithTheEarliestDate(arr) {
+    const datesArr = [];
+    arr.forEach(item => datesArr.push(Date.parse(item.releaseDate)));
+    const theEarliestReleaseDate = Math.min(...datesArr);
 
-    books.map(book => pagesArr.push(Date.parse(new Date(book.releaseDate))));
-    const theEarliestReleaseDate = Math.min.apply(null, pagesArr);
-
-    const getTheBookWithTheEarliestDate = books.find(book => {
-        let releaseDate = Date.parse(new Date(book.releaseDate));
+    const getTheBookWithTheEarliestDate = arr.filter(item => {
+        let releaseDate = Date.parse(item.releaseDate);
         return releaseDate === theEarliestReleaseDate;
     })
 
     return getTheBookWithTheEarliestDate;
 }
 
-findBookWithTheEarliestDate();
+findBookWithTheEarliestDate(books);
 
 // 2. Znajdź książki które:
 // 	* są wydane pomiędzy dwiema wybranymi datami,
