@@ -1,3 +1,5 @@
+"use strict";
+
 const url = './books.json';
 
 let requestURL = new XMLHttpRequest();
@@ -85,6 +87,13 @@ requestURL.onload = () => {
     // 	* powstały array obiektów grupujących książki ze względu na currency (schemat {[currency: string]: Book[]})
 
     // 	* otrzymać listę unikalnych nazwisk autorów,
+    function getUniqueSurnames(arr) {
+        const authorsList = [];
+        arr.forEach(item => authorsList.push(item.author.surname));
+
+        return authorsList.filter((item, index) => authorsList.indexOf(item) === index)
+    }
+    getUniqueSurnames(books);
 
     // 	* releaseDate była zmieniona w dowolny inny format docelowe formaty: 
     // 		YYYY: 4-digit year *
