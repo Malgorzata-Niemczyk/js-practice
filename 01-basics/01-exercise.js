@@ -101,32 +101,65 @@ findAllBoughtBooks();
 // 	* powstały array obiektów grupujących książki ze względu na currency (schemat {[currency: string]: Book[]}[])
 // 	* otrzymać listę unikalnych imion autorów,
 // 	* releaseDate była zmieniona w dowolny inny format docelowe formaty: 
-// 		YYYY: 4-digit year
+// 		YYYY: 4-digit year *
 // 		YY: 2-digit year
-// 		MM: 2-digit month (where January is 01 and December is 12)
-// 		M: month from 1 to 12
-// 		DD: 2-digit date (01 to 31)
-// 		dd: 2-digit date (1 to 31)
-// 		HH: 24-digit hour (0 to 23)
+// 		MM: 2-digit month (where January is 01 and December is 12) *
+// 		M: month from 1 to 12 *
+// 		DD: 2-digit date (01 to 31) *
+// 		dd: 2-digit date (1 to 31) *
+// 		HH: 24-digit hour (0 to 23) *
 // 		hh: 12-digit hour (0 to 12) (need to add AM/PM)
-// 		mm: Minutes (00 to 59)
-// 		ss: Seconds (00 to 59)
+// 		mm: Minutes (00 to 59) *
+// 		ss: Seconds (00 to 59) *
 // 		sss: Milliseconds (0 to 999)
 
 function formatReleaseDate() {
-    let fourDigitYear = books.map(book => (new Date(book.releaseDate)).getFullYear());
-    let monthFrom1To12 = books.map(book => (new Date(book.releaseDate)).getMonth() + 1);
-    let hour24digit = books.map(book => (new Date(book.releaseDate)).getHours());
+    let fourDigitYear = books.map(book => new Date(book.releaseDate).getFullYear());
+
+    let monthFrom1To12 = books.map(book => new Date(book.releaseDate).getMonth() + 1);
+
+    let twoDigitMonth = books.map(book => {
+        return new Date(book.releaseDate).getMonth() + 1 < 10
+                ? `0${new Date(book.releaseDate).getMonth() + 1}`
+                :new Date(book.releaseDate).getMonth() + 1
+    });
+    let date = books.map(book => new Date(book.releaseDate).getDate());
+
+    let twoDigitDate = books.map(book => {
+        return new Date(book.releaseDate).getDate() < 10
+                ? `0${new Date(book.releaseDate).getDate()}`
+                : new Date(book.releaseDate).getDate()
+    });
+
+    let hour24digit = books.map(book => new Date(book.releaseDate).getHours());
+
+    let minutes = books.map(book => {
+        return new Date(book.releaseDate).getMinutes() < 10
+                ? `0${new Date(book.releaseDate).getMinutes()}`
+                : new Date(book.releaseDate).getMinutes()
+    });
+
+    let seconds = books.map(book => {
+        return new Date(book.releaseDate).getSeconds() < 10
+                ? `0${new Date(book.releaseDate).getSeconds()}`
+                : new Date(book.releaseDate).getSeconds()
+    });
 
     return {
         fourDigitYear,
         monthFrom1To12,
+        twoDigitMonth,
+        date,
+        twoDigitDate,
         hour24digit,
+        minutes,
+        seconds
     }
     
 }
 
 formatReleaseDate();
+console.log(formatReleaseDate())
 
 // 	* sortowane wg podanego pola i kierunku sortowania
 
