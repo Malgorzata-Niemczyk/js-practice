@@ -99,7 +99,9 @@ findAllBoughtBooks();
 
 // 3. Przetwórz dane tak aby:
 // 	* powstały array obiektów grupujących książki ze względu na currency (schemat {[currency: string]: Book[]}[])
+
 // 	* otrzymać listę unikalnych imion autorów,
+
 // 	* releaseDate była zmieniona w dowolny inny format docelowe formaty: 
 // 		YYYY: 4-digit year *
 // 		YY: 2-digit year
@@ -159,8 +161,27 @@ function formatReleaseDate() {
 }
 
 formatReleaseDate();
-console.log(formatReleaseDate())
 
 // 	* sortowane wg podanego pola i kierunku sortowania
+function sortedBooksbyAuthorSurname() {
+    const sortedBooks = books.sort((a, b) => {
+        let authorOne = a.author.surname.toLowerCase();
+        let authorTwo = b.author.surname.toLowerCase();
+
+        if (authorOne > authorTwo) {
+            return 1;
+        } 
+
+        if (authorOne < authorTwo) {
+            return -1;
+        }
+
+        return 0;
+    })
+
+    return sortedBooks;
+}
+
+sortedBooksbyAuthorSurname();
 
 }
