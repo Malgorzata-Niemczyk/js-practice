@@ -12,23 +12,28 @@ requestURL.onload = () => {
 //     1. Znajdź książkę która:
 // 	* ma najwięcej stron
 // 	* ma najmniej stron,
-function findBookWithTheHighestOrLowestNumOfPages() {
+function findBooksWithTheLowestNumOfPages(arr) {
     const pagesArr = [];
 
-    books.map(book => pagesArr.push(book.pages));
-    const highestNum = Math.max(...pagesArr);
+    arr.forEach(item => pagesArr.push(item.pages));
     const lowestNum = Math.min(...pagesArr);
 
-    const foundBookWithTheHighestPages = books.find(book => book.pages === highestNum);
-    const foundBookWithTheLowestPages = books.find(book => book.pages === lowestNum);
-
-    return {
-        foundBookWithTheHighestPages,
-        foundBookWithTheLowestPages
-    }    
+    const foundBooksWithTheLowestPages = arr.filter(item => item.pages === lowestNum);
+    return foundBooksWithTheLowestPages;
 }
+findBooksWithTheLowestNumOfPages(books);
 
-findBookWithTheHighestOrLowestNumOfPages();
+
+function findBooksWithTheHighestNumOfPages(arr) {
+    const pagesArr = [];
+
+    arr.forEach(item => pagesArr.push(item.pages));
+    const highestNum = Math.max(...pagesArr);
+
+    const foundBookWithTheHighestPages = arr.filter(item => item.pages === highestNum);
+    return foundBookWithTheHighestPages;   
+}
+findBooksWithTheHighestNumOfPages(books);
 
 // 	* została wydana najwcześniej
 function findBookWithTheEarliestDate() {
@@ -87,7 +92,7 @@ function findAllBoughtBooks() {
     const allBoughtBooks = [];
 
     for (let book of books) {
-        if (book.bought === true) {
+        if (book.bought) {
             allBoughtBooks.push(book);
         }
     }
@@ -98,9 +103,9 @@ function findAllBoughtBooks() {
 findAllBoughtBooks();
 
 // 3. Przetwórz dane tak aby:
-// 	* powstały array obiektów grupujących książki ze względu na currency (schemat {[currency: string]: Book[]}[])
+// 	* powstały array obiektów grupujących książki ze względu na currency (schemat {[currency: string]: Book[]})
 
-// 	* otrzymać listę unikalnych imion autorów,
+// 	* otrzymać listę unikalnych nazwisk autorów,
 
 // 	* releaseDate była zmieniona w dowolny inny format docelowe formaty: 
 // 		YYYY: 4-digit year *
