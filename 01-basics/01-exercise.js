@@ -45,12 +45,12 @@ requestURL.onload = () => {
         arr.forEach(item => datesArr.push(Date.parse(item.releaseDate)));
         const theEarliestReleaseDate = Math.min(...datesArr);
 
-        const getTheBookWithTheEarliestDate = arr.filter(item => {
+        const bookskWithTheEarliestDate = arr.filter(item => {
             let releaseDate = Date.parse(item.releaseDate);
             return releaseDate === theEarliestReleaseDate;
         })
 
-        return getTheBookWithTheEarliestDate;
+        return bookskWithTheEarliestDate;
     }
 
     // findBookWithTheEarliestDate(books);
