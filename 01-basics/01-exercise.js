@@ -10,6 +10,7 @@ requestURL.send();
 requestURL.onload = () => {
     const books = requestURL.response;
     // console.log(books);
+    console.log(formatReleaseDate(books, 'mm:yy'))
 }
 
 //     1. Znajdź książkę która:
@@ -128,49 +129,38 @@ requestURL.onload = () => {
     // 		ss: Seconds (00 to 59) *
     // 		sss: Milliseconds (0 to 999)
 
-    function formatReleaseDate() {
-        let fourDigitYear = books.map(book => new Date(book.releaseDate).getFullYear());
+    function formatReleaseDate(arr, dateFormat, separator) {
+        const booksArr = [...arr];
 
-        let monthFrom1To12 = books.map(book => new Date(book.releaseDate).getMonth() + 1);
+        const formattedDate = booksArr.map(item => {
+            let releaseDate = new Date(item.releaseDate);
+                
+            let yyyy = releaseDate.getFullYear();
+            let yy = releaseDate.getFullYear().toString().substr(2,2);
+            let mm = (releaseDate.getMonth() + 1 < 10) ? `0${releaseDate.getMonth() + 1}` : (releaseDate.getMonth() + 1);
+            let dd = (releaseDate.getDate() < 10) ? `0${releaseDate.getDate()}` : (releaseDate.getDate());
+            let hh = releaseDate.getHours();
+            let mins = (releaseDate.getMinutes() < 10) ? `0${releaseDate.getMinutes()}` : releaseDate.getMinutes();
+            let ss = (releaseDate.getSeconds() < 10) ?  `0${releaseDate.getSeconds()}` : releaseDate.getSeconds();
+            let milisec = releaseDate.getMilliseconds();
 
-        let twoDigitMonth = books.map(book => {
-            return new Date(book.releaseDate).getMonth() + 1 < 10
-                    ? `0${new Date(book.releaseDate).getMonth() + 1}`
-                    :new Date(book.releaseDate).getMonth() + 1
+            switch(dateFormat) {
+                case 'yyyy:mm:dd':
+                    releaseDate = (separator === '-') ? `${yyyy}${separator}${mm}${separator}${dd}` : `${yyyy}:${mm}:${dd}`;
+                    break;
+                case 'dd:mm:hh:ss:ms':
+                    releaseDate =  (separator === '-') ? `${dd}${separator}${mm}${separator}${hh}${separator}${mins}${separator}${ss}${separator}${milisec}` : `${dd}:${mm}:${hh}:${mins}:${ss}:${milisec}`;
+                    break;
+                case 'mm:yy':
+                    releaseDate = (separator === '-') ? `${mm}${separator}${yy}` : releaseDate = `${mm}:${yy}`;
+                    break;
+                default:
+                    console.error(`This date format is not valid`);      
+            }
+            // console.log(releaseDate);
+            return releaseDate;
         });
-        let date = books.map(book => new Date(book.releaseDate).getDate());
-
-        let twoDigitDate = books.map(book => {
-            return new Date(book.releaseDate).getDate() < 10
-                    ? `0${new Date(book.releaseDate).getDate()}`
-                    : new Date(book.releaseDate).getDate()
-        });
-
-        let hour24digit = books.map(book => new Date(book.releaseDate).getHours());
-
-        let minutes = books.map(book => {
-            return new Date(book.releaseDate).getMinutes() < 10
-                    ? `0${new Date(book.releaseDate).getMinutes()}`
-                    : new Date(book.releaseDate).getMinutes()
-        });
-
-        let seconds = books.map(book => {
-            return new Date(book.releaseDate).getSeconds() < 10
-                    ? `0${new Date(book.releaseDate).getSeconds()}`
-                    : new Date(book.releaseDate).getSeconds()
-        });
-
-        return {
-            fourDigitYear,
-            monthFrom1To12,
-            twoDigitMonth,
-            date,
-            twoDigitDate,
-            hour24digit,
-            minutes,
-            seconds
-        }
-        
+ 
     }
 
     // formatReleaseDate();
