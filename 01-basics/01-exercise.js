@@ -11,7 +11,12 @@ requestURL.onload = () => {
     const books = requestURL.response;
     // console.log(books);
 
-    //     1. Znajdź książkę która:
+    // findBooksWithTheLowestNumOfPages(books);
+    // groupByCurrency(books, "currency");
+    
+}
+
+//     1. Znajdź książkę która:
     // 	* ma najmniej stron,
     function findBooksWithTheLowestNumOfPages(arr) {
         const pagesArr = [];
@@ -22,7 +27,7 @@ requestURL.onload = () => {
         return arr.filter(item => item.pages === lowestNum);
     }
     
-    findBooksWithTheLowestNumOfPages(books);
+    
 
      //  * ma najwięcej stron
     function findBooksWithTheHighestNumOfPages(arr) {
@@ -34,7 +39,8 @@ requestURL.onload = () => {
         return arr.filter(item => item.pages === highestNum);  
     }
 
-    findBooksWithTheHighestNumOfPages(books);
+    // findBooksWithTheHighestNumOfPages(books);
+
 
     // 	* została wydana najwcześniej
     function findBookWithTheEarliestDate(arr) {
@@ -50,7 +56,8 @@ requestURL.onload = () => {
         return getTheBookWithTheEarliestDate;
     }
 
-    findBookWithTheEarliestDate(books);
+    // findBookWithTheEarliestDate(books);
+
 
     // 2. Znajdź książki które:
     // 	* są wydane pomiędzy dwiema wybranymi datami,
@@ -60,31 +67,48 @@ requestURL.onload = () => {
         })
     }
 
-    findBooksBetweenChosenDates(books, new Date('January 19, 1983 10:15:30'), new Date('August 25, 1986 10:15:30'));
+    // findBooksBetweenChosenDates(books, new Date('January 19, 1983 10:15:30'), new Date('August 25, 1986 10:15:30'));
 
     // 	* mają rating większy/mniejszy niż szukany,
-    const findgGreaterThanSearchedRating = (arr, ratingLowerThanSearched, ratingHigherThanSearched) => {
+    const findGreaterOrLowerThanSearchedRating = (arr, ratingLowerThanSearched, ratingHigherThanSearched) => {
         return arr.filter(item => item.rating < ratingLowerThanSearched || item.rating > ratingHigherThanSearched);
     }
 
-    findgGreaterThanSearchedRating(books, 2, 4);
+    // findGreaterOrLowerThanSearchedRating(books, 2, 4);
+
 
     // 	* mają ilość stron w podanym przedziale,
     const findBookInPageRange = (arr, pageFrom, pageTo) => {
         return arr.filter(item => item.pages >= pageFrom && item.pages <= pageTo);
     }
 
-    findBookInPageRange(books, 720, 900);
+    // findBookInPageRange(books, 720, 900);
+
 
     // 	* wszystkie kupione
     function findAllBoughtBooks(arr) {
         return arr.filter(item => item.bought);
     }
 
-    findAllBoughtBooks(books);
+    // findAllBoughtBooks(books);
+
 
     // 3. Przetwórz dane tak aby:
     // 	* powstały array obiektów grupujących książki ze względu na currency (schemat {[currency: string]: Book[]})
+    function groupByCurrency(objectArr, property) {
+        return objectArr.reduce((accumulator, object) => {
+            let key = object[property];
+            if (!accumulator[key]) {
+                accumulator[key] = [];
+            } 
+
+            accumulator[key].push(object)
+            return accumulator
+        }, {})
+    }
+
+    // groupByCurrency(books, "currency");
+
 
     // 	* otrzymać listę unikalnych nazwisk autorów,
     function getUniqueSurnames(arr) {
@@ -93,7 +117,7 @@ requestURL.onload = () => {
 
         return authorsList.filter((item, index) => authorsList.indexOf(item) === index)
     }
-    getUniqueSurnames(books);
+    // getUniqueSurnames(books);
 
     // 	* releaseDate była zmieniona w dowolny inny format docelowe formaty: 
     // 		YYYY: 4-digit year *
@@ -153,7 +177,7 @@ requestURL.onload = () => {
         
     }
 
-    formatReleaseDate();
+    // formatReleaseDate();
 
     // 	* sortowane wg podanego pola i kierunku sortowania
     function sortedBooksbyAuthorSurname(arr) {
@@ -174,6 +198,4 @@ requestURL.onload = () => {
         return sortedBooks;
     }
 
-    sortedBooksbyAuthorSurname(books);
-
-}
+    // sortedBooksbyAuthorSurname(books);
