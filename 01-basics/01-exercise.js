@@ -10,10 +10,6 @@ requestURL.send();
 requestURL.onload = () => {
     const books = requestURL.response;
     // console.log(books);
-
-    // findBooksWithTheLowestNumOfPages(books);
-    // groupByCurrency(books, "currency");
-    
 }
 
 //     1. Znajdź książkę która:
@@ -180,8 +176,8 @@ requestURL.onload = () => {
     // formatReleaseDate();
 
     // 	* sortowane wg podanego pola i kierunku sortowania
-    function sortedBooksbyAuthorSurname(arr) {
-        const sortedBooks = [...arr].sort((a, b) => {
+    function sortBooksbyAuthorSurname(arr) {
+        return [...arr].sort((a, b) => {
             let authorOne = a.author.surname.toLocaleLowerCase();
             let authorTwo = b.author.surname.toLocaleLowerCase();
 
@@ -192,10 +188,7 @@ requestURL.onload = () => {
             } else {
                 return 0;
             }
-
         })
-
-        return sortedBooks;
     }
 
-    // sortedBooksbyAuthorSurname(books);
+    // sortBooksbyAuthorSurname(books);
