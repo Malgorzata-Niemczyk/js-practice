@@ -36,7 +36,7 @@ requestURL.addEventListener('load', () => {
 
 // 	10. Które słowa powtarzał się najczęściej a które najrzadziej.
 
-// 	11. Pogrupuj ludzi wg. zamieszkania.
+// 	11. Pogrupuj ludzi wg. zamieszkania (nazwa ulicy).
 
 // 	12. Jakie numery domów najczęściej się potwarzały.
 
@@ -50,8 +50,8 @@ requestURL.addEventListener('load', () => {
 
 // 	17. Czy ktoś mieszka na tej samej ulicy, a jeżeli tak, to kto?
 
-// 	18. Jakie zdanie/zdania były najdłuższe?
+// 	18. Jakie zdanie/zdania były najdłuższe (description)?
 
-// 	19. Jakie słowa mają liczbę znaków pomiędzy X a Y?
+// 	19. Jakie słowa mają liczbę znaków pomiędzy X a Y (description)?
 
-// 	12. Które stany są najbardziej zaludnione, a które mniej?
+// 	20. Które stany są najbardziej zaludnione, a które najmniej?
