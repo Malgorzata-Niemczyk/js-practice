@@ -11,7 +11,7 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    // console.log(findTheMostOrLeastRepeatedWords(people))
+    // console.log(getPeopleWithTheLongestDescription(people))
 })
 
 
@@ -55,6 +55,18 @@ function findUniqueCountriesWherePeopleCurrentlyLive(arr) {
 // 	7. Zwracającą średnie wynagrodzenie pracownika w danej firmie.
 
 // 	8. Zwracającą osoby, które najwięcej o sobie opisały w polu description.
+function getPeopleWithTheLongestDescription(arr) {
+    const descriptionsList = [];
+    arr.forEach(person => descriptionsList.push(person.description));
+    const descriptionsLengthsArr = descriptionsList.map(sentence => sentence.length);
+    const maxLength = Math.max(...descriptionsLengthsArr);
+
+    return arr.filter(person => {
+        if (person.description.length === maxLength) {
+            return person;
+        }
+    })
+}
 
 // 	9. Policz różne (unikalne) słowa wykorzystane w polu description.
 function countUniqueWords(arr) {
