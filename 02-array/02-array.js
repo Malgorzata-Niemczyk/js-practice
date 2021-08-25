@@ -64,9 +64,7 @@ function countUniqueWords(arr) {
 
     const flattenedWordsList = wordsList.flat();
     
-    const uniqueWords = flattenedWordsList.filter((value, index) => flattenedWordsList.indexOf(value) === index);
-   
-    return uniqueWords.length;
+    return flattenedWordsList.filter((value, index) => flattenedWordsList.indexOf(value) === index).length;
 }
 
 // 	10. Które słowa powtarzał się najczęściej a które najrzadziej.
