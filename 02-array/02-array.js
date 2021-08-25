@@ -11,7 +11,7 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log( countUniqueWords(people))
+    // console.log(findTheLongestSentence(people))
 })
 
 
@@ -67,7 +67,7 @@ function countUniqueWords(arr) {
     return flattenedWordsList.filter((value, index) => flattenedWordsList.indexOf(value) === index).length;
 }
 
-// 	10. Które słowa powtarzał się najczęściej a które najrzadziej.
+// 	10. Które słowa powtarzały się najczęściej, a które najrzadziej.
 
 // 	11. Pogrupuj ludzi wg. zamieszkania (nazwa ulicy).
 
@@ -84,6 +84,15 @@ function countUniqueWords(arr) {
 // 	17. Czy ktoś mieszka na tej samej ulicy, a jeżeli tak, to kto?
 
 // 	18. Jakie zdanie/zdania były najdłuższe (description)?
+function findTheLongestSentence(arr) {
+    const sentencesList = [];
+    arr.forEach(person => sentencesList.push(person.description));
+
+    const sentencesLengthsArr = sentencesList.map(sentence => sentence.length);
+    const maxLength = Math.max(...sentencesLengthsArr);
+
+    return sentencesList.filter(sentence => sentence.length === maxLength);
+}
 
 // 	19. Jakie słowa mają liczbę znaków pomiędzy X a Y (description)?
 
