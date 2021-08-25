@@ -11,6 +11,7 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
+    console.log( countUniqueWords(people))
 })
 
 
@@ -44,7 +45,8 @@ function findUniqueCountriesWherePeopleCurrentlyLive(arr) {
 
 // 	3. Zwracającą liczbę aktualnie mieszkających ludzi w danym kraju.
 
-// 	4. Zwracającą listę krajów w których żyję więcej lub mniej ludzi niż X
+
+// 	4. Zwracającą listę krajów, w których żyje więcej lub mniej ludzi niż X
 
 // 	5. Zwracającą imiona, osób pracująćych w największej lub najmniejszej firmie w danym czasie.
 
@@ -54,7 +56,18 @@ function findUniqueCountriesWherePeopleCurrentlyLive(arr) {
 
 // 	8. Zwracającą osoby, które najwięcej o sobie opisały w polu description.
 
-// 	9. Policz różne słowa wykorzystane w polu description.
+// 	9. Policz różne (unikalne) słowa wykorzystane w polu description.
+function countUniqueWords(arr) {
+    const wordsList = [];
+    
+    arr.forEach(person => wordsList.push(person.description.split(' ')));
+
+    const flattenedWordsList = wordsList.flat();
+    
+    const uniqueWords = flattenedWordsList.filter((value, index) => flattenedWordsList.indexOf(value) === index);
+   
+    return uniqueWords.length;
+}
 
 // 	10. Które słowa powtarzał się najczęściej a które najrzadziej.
 
