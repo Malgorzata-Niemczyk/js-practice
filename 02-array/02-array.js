@@ -17,8 +17,30 @@ requestURL.addEventListener('load', () => {
 // Napisz metody, które:
 
 // 	1. Zwracającą listę unikalnych nazw krajów w których żyli ludzie.
+function findUniqueCountriesWherePeopleLivedBefore(arr) {
+    const countriesList = [];
+
+    arr.forEach(person => person.address.forEach(details => {
+        if(!details.actualAddress) {
+            countriesList.push(details.country)
+        }
+    }))
+
+    return countriesList.filter((value, index) => countriesList.indexOf(value) === index)
+}
 
 // 	2. Zwracającą listę unikalnych nazw krajów w których ludzie żyją aktualnie.
+function findUniqueCountriesWherePeopleCurrentlyLive(arr) {
+    const countriesList = [];
+
+    arr.forEach(person => person.address.forEach(details => {
+        if(details.actualAddress) {
+            countriesList.push(details.country)
+        }
+    }))
+
+    return countriesList.filter((value, index) => countriesList.indexOf(value) === index);
+}
 
 // 	3. Zwracającą liczbę aktualnie mieszkających ludzi w danym kraju.
 
