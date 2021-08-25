@@ -11,7 +11,7 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    // console.log(findTheLongestSentence(people))
+    // console.log(findTheMostOrLeastRepeatedWords(people))
 })
 
 
@@ -68,6 +68,26 @@ function countUniqueWords(arr) {
 }
 
 // 	10. Które słowa powtarzały się najczęściej, a które najrzadziej.
+function findTheMostOrLeastRepeatedWords(arr) {
+    const wordsList = [];
+    arr.forEach(person => wordsList.push(person.description.split(' ')));
+    const flattenedWordsList = wordsList.flat();
+
+    const wordsCounter = {};
+    flattenedWordsList.forEach(word => wordsCounter[word] ? wordsCounter[word]++ : wordsCounter[word] = 1);
+
+    let maxCount = Math.max(...Object.values(wordsCounter));
+    let minCount = Math.min(...Object.values(wordsCounter));
+
+    let theMostRepeatedWords = Object.entries(wordsCounter).filter(([word, count]) => count === maxCount);
+
+    let theLeastRepeatedWords = Object.entries(wordsCounter).filter(([word, count]) => count === minCount);
+
+    return {
+        theMostRepeatedWords,
+        theLeastRepeatedWords
+    }
+}
 
 // 	11. Pogrupuj ludzi wg. zamieszkania (nazwa ulicy).
 
@@ -95,5 +115,6 @@ function findTheLongestSentence(arr) {
 }
 
 // 	19. Jakie słowa mają liczbę znaków pomiędzy X a Y (description)?
+
 
 // 	20. Które stany są najbardziej zaludnione, a które najmniej?
