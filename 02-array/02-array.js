@@ -11,7 +11,7 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    // console.log(findWordsWithinCharactersRange(people, 2, 8));
+    // console.log(sortPeopleByGivenProperty(people, 'surname'));
 })
 
 
@@ -124,6 +124,20 @@ function findTheMostRepeatedHouseNumbers(arr) {
 // 	15. Informującą ile osób pracowało w danym roku.
 
 // 	16. Sortującą ludzi wg imienia, nazwiska, kraj zamieszkania, bądź nazwy firmy dla której ostatnio pracowali bądź dalej pracują.
+function sortPeopleByGivenProperty(arr, propertyName) {
+    return [...arr].sort((a, b) => {
+        let propertyA = a[propertyName];
+        let propertyB = b[propertyName];
+
+        if (propertyA > propertyB) {
+            return 1;
+        } else if (propertyA < propertyB) {
+            return -1;
+        } else {
+            return 0
+        }
+    });
+} // works for the firstname and surname
 
 // 	17. Czy ktoś mieszka na tej samej ulicy, a jeżeli tak, to kto?
 
