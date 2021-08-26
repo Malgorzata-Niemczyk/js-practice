@@ -11,7 +11,7 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    // console.log(findTheMostRepeatedHouseNumbers(people));
+    // console.log(findWordsWithinCharactersRange(people, 2, 8));
 })
 
 
@@ -139,6 +139,17 @@ function findTheLongestSentence(arr) {
 }
 
 // 	19. Jakie słowa mają liczbę znaków pomiędzy X a Y (description)?
+function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo) {
+    const wordsList = [];
+    arr.forEach(person => wordsList.push(person.description.split(' ')));
+    const flattenedWordsList = wordsList.flat();
+
+    return flattenedWordsList.filter((word, index) => {
+        if (word.length >= charactersNumFrom && word.length <= charactersNumTo && flattenedWordsList.indexOf(word) === index) {
+            return word;
+        }
+    })
+}
 
 
 // 	20. Które stany są najbardziej zaludnione, a które najmniej?
