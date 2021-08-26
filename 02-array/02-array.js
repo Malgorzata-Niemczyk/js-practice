@@ -11,7 +11,7 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    // console.log(getPeopleWithTheLongestDescription(people))
+    // console.log(findTheMostRepeatedHouseNumbers(people));
 })
 
 
@@ -104,6 +104,18 @@ function findTheMostOrLeastRepeatedWords(arr) {
 // 	11. Pogrupuj ludzi wg. zamieszkania (nazwa ulicy).
 
 // 	12. Jakie numery domów najczęściej się potwarzały.
+function findTheMostRepeatedHouseNumbers(arr) {
+    const houseNumbersList = [];
+
+    arr.forEach(person => person.address.forEach(item => houseNumbersList.push(item.number)));
+
+    const houseNumsRepsCounter = {};
+    houseNumbersList.forEach(houseNumber => houseNumsRepsCounter[houseNumber] ? houseNumsRepsCounter[houseNumber]++ : houseNumsRepsCounter[houseNumber] = 1);
+
+    let maxCount = Math.max(...Object.values(houseNumsRepsCounter));
+
+    return Object.entries(houseNumsRepsCounter).filter(([houseNum, count]) => count === maxCount)
+}
 
 // 	13. Zwracającą ludzi, którzy mieli ciągłość pracy (tj. nie było ani jednego dnia przerwy pomiędzy pracami).
 
