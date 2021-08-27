@@ -7,14 +7,6 @@ requestURL.open('GET', url);
 requestURL.responseType = 'json';
 requestURL.send();
 
-requestURL.addEventListener('load', () => {
-    const people = requestURL.response;
-    // console.log(people);
-    // people.map(person => console.log(person))
-    // console.log(findNumOfPeopleWorkingInSpecificYear(people, 1996));
-})
-
-
 // Napisz metody, które:
 
 // 	1. Zwracającą listę unikalnych nazw krajów w których żyli ludzie.
@@ -120,12 +112,33 @@ function findTheMostRepeatedHouseNumbers(arr) {
 // 	13. Zwracającą ludzi, którzy mieli ciągłość pracy (tj. nie było ani jednego dnia przerwy pomiędzy pracami).
 
 // 	14. W którym roku pracowało najwięcej ludzi a w którym najmniej.
+function getTheHighestOrLowestNumOfPeopleWorking(arr) {
+    const jobsList = [];
+    arr.forEach(person => jobsList.push(person.jobs));
+    const flattenedJobsList = jobsList.flat(2);
+
+    const yearCounter = {};
+    flattenedJobsList.forEach(jobItem => {
+        yearCounter[new Date(jobItem.startedAt).getFullYear()] 
+            ? yearCounter[new Date(jobItem.startedAt).getFullYear()]++ 
+            : yearCounter[new Date(jobItem.startedAt).getFullYear()] = 1});
+
+    let maxCount = Math.max(...Object.values(yearCounter));
+    let minCount = Math.min(...Object.values(yearCounter));
+
+   const yearsWithMaxCount = Object.entries(yearCounter).filter(([year, count]) => count === maxCount);
+   const yearsWithMinCount = Object.entries(yearCounter).filter(([year, count]) => count === minCount);
+
+   return {
+        yearsWithMaxCount,
+        yearsWithMinCount
+   }
+}
 
 // 	15. Informującą ile osób pracowało w danym roku.
 function findNumOfPeopleWorkingInSpecificYear(arr, year) {
     const jobsList = [];
     arr.forEach(person => jobsList.push(person.jobs));
-
     const flattenedJobsList = jobsList.flat(2);
     
     return flattenedJobsList.filter(jobItem => {
@@ -177,5 +190,12 @@ function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo)
     })
 }
 
-
 // 	20. Które stany są najbardziej zaludnione, a które najmniej?
+
+
+requestURL.addEventListener('load', () => {
+    const people = requestURL.response;
+    // console.log(people);
+    // people.map(person => console.log(person))
+    // console.log(getTheHighestOrLowestNumOfPeopleWorking(people));
+})
