@@ -11,7 +11,7 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    // console.log(sortPeopleByGivenProperty(people, 'surname'));
+    // console.log(findNumOfPeopleWorkingInSpecificYear(people, 1996));
 })
 
 
@@ -122,6 +122,18 @@ function findTheMostRepeatedHouseNumbers(arr) {
 // 	14. W którym roku pracowało najwięcej ludzi a w którym najmniej.
 
 // 	15. Informującą ile osób pracowało w danym roku.
+function findNumOfPeopleWorkingInSpecificYear(arr, year) {
+    const jobsList = [];
+    arr.forEach(person => jobsList.push(person.jobs));
+
+    const flattenedJobsList = jobsList.flat(2);
+    
+    return flattenedJobsList.filter(jobItem => {
+       if (new Date(jobItem.startedAt).getFullYear() === year) {
+           return jobItem
+       }
+    }).length
+}
 
 // 	16. Sortującą ludzi wg imienia, nazwiska, kraj zamieszkania, bądź nazwy firmy dla której ostatnio pracowali bądź dalej pracują.
 function sortPeopleByGivenProperty(arr, propertyName) {
