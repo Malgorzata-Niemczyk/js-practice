@@ -12,12 +12,7 @@ requestURL.send();
 // 	1. Zwracającą listę unikalnych nazw krajów w których żyli ludzie.
 function findUniqueCountriesWherePeopleLivedBefore(arr) {
     const countriesList = [];
-
-    arr.forEach(person => person.address.forEach(details => {
-        if(!details.actualAddress) {
-            countriesList.push(details.country)
-        }
-    }))
+    arr.forEach(person => person.addresses.forEach(details => countriesList.push(details.country)))
 
     return countriesList.filter((value, index) => countriesList.indexOf(value) === index)
 }
@@ -25,14 +20,9 @@ function findUniqueCountriesWherePeopleLivedBefore(arr) {
 // 	2. Zwracającą listę unikalnych nazw krajów w których ludzie żyją aktualnie.
 function findUniqueCountriesWherePeopleCurrentlyLive(arr) {
     const countriesList = [];
+    arr.forEach(person => countriesList.push(person.actualAddress.country));
 
-    arr.forEach(person => person.address.forEach(details => {
-        if(details.actualAddress) {
-            countriesList.push(details.country)
-        }
-    }))
-
-    return countriesList.filter((value, index) => countriesList.indexOf(value) === index);
+    return countriesList.filter((value, index) => countriesList.indexOf(value) == index);
 }
 
 // 	3. Zwracającą liczbę aktualnie mieszkających ludzi w danym kraju.
@@ -99,7 +89,7 @@ function findTheMostOrLeastRepeatedWords(arr) {
 function findTheMostRepeatedHouseNumbers(arr) {
     const houseNumbersList = [];
 
-    arr.forEach(person => person.address.forEach(item => houseNumbersList.push(item.number)));
+    arr.forEach(person => person.addresses.forEach(item => houseNumbersList.push(item.number)));
 
     const houseNumsRepsCounter = {};
     houseNumbersList.forEach(houseNumber => houseNumsRepsCounter[houseNumber] ? houseNumsRepsCounter[houseNumber]++ : houseNumsRepsCounter[houseNumber] = 1);
@@ -197,5 +187,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    // console.log(getTheHighestOrLowestNumOfPeopleWorking(people));
+    console.log(getTheHighestOrLowestNumOfPeopleWorking(people));
 })
