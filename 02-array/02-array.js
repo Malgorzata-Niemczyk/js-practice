@@ -97,6 +97,18 @@ function findTheMostOrLeastRepeatedWords(arr) {
 }
 
 // 	11. Pogrupuj ludzi wg. zamieszkania (nazwa ulicy).
+function groupByCurrentAddress(arr) {
+    return arr.reduce((accumulator, object) => {
+        let key = object.actualAddress.street;
+
+        if (!accumulator[key]) {
+            accumulator[key] = [];
+        } 
+
+        accumulator[key].push(object)
+        return accumulator
+    }, {})
+}
 
 // 	12. Jakie numery domów najczęściej się potwarzały.
 function findTheMostRepeatedHouseNumbers(arr) {
@@ -202,5 +214,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getNumOfPeopleLivingInParticularCountry(people, 'Cape Verde'));
+    // console.log(groupByCurrentAddress(people));
 })
