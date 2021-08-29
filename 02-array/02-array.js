@@ -26,6 +26,19 @@ function findUniqueCountriesWherePeopleCurrentlyLive(arr) {
 }
 
 // 	3. Zwracającą liczbę aktualnie mieszkających ludzi w danym kraju.
+function getNumOfPeopleLivingInParticularCountry(arr, countryName) {
+    const currentAddressesList = [];
+    arr.forEach(person => currentAddressesList.push(person.actualAddress));
+
+    const filteredAddresses = [];
+    currentAddressesList.filter(addressDetails => {
+        if (addressDetails.country === countryName) {
+            filteredAddresses.push(addressDetails);
+        }
+    })
+
+    return filteredAddresses.length
+}
 
 
 // 	4. Zwracającą listę krajów, w których żyje więcej lub mniej ludzi niż X
@@ -183,9 +196,11 @@ function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo)
 // 	20. Które stany są najbardziej zaludnione, a które najmniej?
 
 
+
+////
 requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getTheHighestOrLowestNumOfPeopleWorking(people));
+    console.log(getNumOfPeopleLivingInParticularCountry(people, 'Cape Verde'));
 })
