@@ -30,14 +30,7 @@ function getNumOfPeopleLivingInParticularCountry(arr, countryName) {
     const currentAddressesList = [];
     arr.forEach(person => currentAddressesList.push(person.actualAddress));
 
-    const filteredAddresses = [];
-    currentAddressesList.filter(addressDetails => {
-        if (addressDetails.country === countryName) {
-            filteredAddresses.push(addressDetails);
-        }
-    })
-
-    return filteredAddresses.length
+    return currentAddressesList.filter(addressDetails => addressDetails.country === countryName).length
 }
 
 
@@ -74,11 +67,7 @@ function getPeopleWithTheLongestDescription(arr) {
     const descriptionsLengthsArr = descriptionsList.map(sentence => sentence.length);
     const maxLength = Math.max(...descriptionsLengthsArr);
 
-    return arr.filter(person => {
-        if (person.description.length === maxLength) {
-            return person;
-        }
-    })
+    return arr.filter(person => person.description.length === maxLength);
 }
 
 // 	9. Policz różne (unikalne) słowa wykorzystane w polu description.
@@ -174,11 +163,9 @@ function findNumOfPeopleWorkingInSpecificYear(arr, year) {
     arr.forEach(person => jobsList.push(person.jobs));
     const flattenedJobsList = jobsList.flat(2);
     
-    return flattenedJobsList.filter(jobItem => {
-       if (new Date(jobItem.startedAt).getFullYear() === year) {
-           return jobItem
-       }
-    }).length
+    return flattenedJobsList.filter(jobItem => 
+        new Date(jobItem.startedAt).getFullYear() === year
+    ).length
 }
 
 // 	16. Sortującą ludzi wg imienia, nazwiska, kraj zamieszkania, bądź nazwy firmy dla której ostatnio pracowali bądź dalej pracują.
@@ -273,5 +260,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getPeopleLivingOnTheSameStreet(people, 'Chapel Street'));
+    console.log(findNumOfPeopleWorkingInSpecificYear(people, 1993));
 })
