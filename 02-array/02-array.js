@@ -198,6 +198,17 @@ function sortPeopleByGivenProperty(arr, propertyName) {
 } // works for the firstname and surname
 
 // 	17. Czy ktoś mieszka na tej samej ulicy, a jeżeli tak, to kto?
+function getPeopleLivingOnTheSameStreet(arr, streetName) {
+    const peoplesNames = [];
+
+    arr.forEach(person => {
+        if (person.actualAddress.street === streetName) {
+            peoplesNames.push(`${person.surname} ${person.firstname}`);
+        }
+    })
+
+    return peoplesNames;
+}
 
 // 	18. Jakie zdanie/zdania były najdłuższe (description)?
 function findTheLongestSentence(arr) {
@@ -262,5 +273,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getTheMostAndLeastPopulatedState(people));
+    console.log(getPeopleLivingOnTheSameStreet(people, 'Chapel Street'));
 })
