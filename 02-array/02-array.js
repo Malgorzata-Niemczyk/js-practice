@@ -42,6 +42,24 @@ function getNumOfPeopleLivingInParticularCountry(arr, countryName) {
 
 
 // 	4. Zwracającą listę krajów, w których żyje więcej lub mniej ludzi niż X
+function getSpecificCountriesList(arr, compareNum) {
+    const countriesList = [];
+    arr.forEach(person => countriesList.push(person.actualAddress.country));
+
+    const countriesRepsCounter = {};
+    countriesList.forEach(country => 
+        countriesRepsCounter[country]
+            ? countriesRepsCounter[country]++
+            : countriesRepsCounter[country] = 1
+    )
+
+    return Object.entries(countriesRepsCounter).filter(([countryName, count]) => {
+        if (count > compareNum) {
+           return countryName
+        }
+    })
+}
+
 
 // 	5. Zwracającą imiona, osób pracująćych w największej lub najmniejszej firmie w danym czasie.
 
@@ -214,5 +232,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    // console.log(groupByCurrentAddress(people));
+    console.log(getSpecificCountriesList(people, 90));
 })
