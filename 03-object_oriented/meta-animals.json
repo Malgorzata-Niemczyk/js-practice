@@ -1,0 +1,96 @@
+{
+	"kura": {
+		"nioska": {
+			"eggsPerDay": 3,
+			"averageLifespan": {
+				"value": 10,
+				"unit": "year"
+			},
+			"metanProductionPerDay": {
+				"value": 134,
+				"unit": "g"
+			},
+			"feedPerDay": {
+				"value": 160,
+				"unit": "g"
+			},
+			"maturity": {
+				"value": 5,
+				"unit": "month"
+			}
+		},
+		"mięsna": {
+			"eggsPerDay": 0.5,
+			"averageLifespan": {
+				"value": 10,
+				"unit": "year"
+			},
+			"metanProductionPerDay": {
+				"value": 250,
+				"unit": "g"
+			},
+			"feedPerDay": {
+				"value": 230,
+				"unit": "g"
+			},
+			"maturity": {
+				"value": 7,
+				"unit": "month"
+			}
+		}
+	},
+	"cow" : {
+		"mleczna": {
+			"feedPerDay": {
+				"value": 20,
+				"unit": "kg"
+			},
+			"milkPerDay": {
+				"value": 20,
+				"unit": "L"
+			},
+			"metanProductionPerDay": {
+				"value": 4,
+				"unit": "kg"
+			},
+			"maturity": {
+				"value": 23,
+				"unit": "month"
+			}
+		},
+		"mięsna": {
+			"feedPerDay": {
+				"value": 30,
+				"unit": "kg"
+			},
+			"milkPerDay": {
+				"value": 5,
+				"unit": "L"
+			},
+			"metanProductionPerDay": {
+				"value": 6,
+				"unit": "kg"
+			},
+			"maturity": {
+				"value": 25,
+				"unit": "month"
+			}
+		}
+	},
+	"pig": {
+		"mięsna": {
+			"feedPerDay": {
+				"value": 4,
+				"unit": "kg"
+			},
+			"metanProductionPerDay": {
+				"value": 3,
+				"unit": "kg"
+			},
+			"maturity": {
+				"value": 6,
+				"unit": "month"
+			}
+		}
+	}
+}
