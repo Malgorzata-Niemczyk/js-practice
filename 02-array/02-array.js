@@ -121,14 +121,20 @@ function groupByCurrentAddress(arr) {
 function findTheMostRepeatedHouseNumbers(arr) {
     const houseNumbersList = [];
 
-    arr.forEach(person => person.addresses.forEach(item => houseNumbersList.push(item.number)));
+    arr.forEach(person => {
+        person.addresses.forEach(item => houseNumbersList.push(item.number));
+        houseNumbersList.push(person.actualAddress.number);
+    });
 
     const houseNumsRepsCounter = {};
     houseNumbersList.forEach(houseNumber => houseNumsRepsCounter[houseNumber] ? houseNumsRepsCounter[houseNumber]++ : houseNumsRepsCounter[houseNumber] = 1);
 
     let maxCount = Math.max(...Object.values(houseNumsRepsCounter));
 
-    return Object.entries(houseNumsRepsCounter).filter(([houseNum, count]) => count === maxCount)
+    let theMostRepeatedHouseNum = [];
+    Object.entries(houseNumsRepsCounter).filter(([houseNum, count]) => count === maxCount && theMostRepeatedHouseNum.push(houseNum));
+
+    return theMostRepeatedHouseNum;
 }
 
 // 	13. Zwracającą ludzi, którzy mieli ciągłość pracy (tj. nie było ani jednego dnia przerwy pomiędzy pracami).
@@ -260,5 +266,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(findNumOfPeopleWorkingInSpecificYear(people, 1993));
+    // console.log(findTheMostRepeatedHouseNumbers(people));
 })
