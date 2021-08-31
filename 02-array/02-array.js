@@ -241,17 +241,9 @@ function getTheMostAndLeastPopulatedState(arr) {
     const maxCount = Math.max(...Object.values(statesRepsCounter));
     const minCount = Math.min(...Object.values(statesRepsCounter));
 
-    const stateWithMaxCount = Object.entries(statesRepsCounter).filter(([stateName, count]) => {
-        if (count === maxCount) {
-            return stateName;
-        }
-    })
+    const stateWithMaxCount = Object.entries(statesRepsCounter).filter(([stateName, count]) => count === maxCount);
 
-    const stateWithMinCount = Object.entries(statesRepsCounter).filter(([stateName, count]) => {
-        if (count === minCount) {
-            return stateName;
-        }
-    })
+    const stateWithMinCount = Object.entries(statesRepsCounter).filter(([stateName, count]) => count === minCount);
 
     return {
         stateWithMaxCount,
@@ -265,5 +257,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getSpecificCountriesList(people, 60));
+    console.log(getTheMostAndLeastPopulatedState(people));
 })
