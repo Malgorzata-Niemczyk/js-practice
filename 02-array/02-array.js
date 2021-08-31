@@ -56,6 +56,21 @@ function getSpecificCountriesList(arr, compareNum) {
 // 	5. Zwracającą imiona, osób pracująćych w największej lub najmniejszej firmie w danym czasie.
 
 // 	6. Zwracającą firmę, która płaci w sumie najwięcej lub najmniej swoim pracownikom.
+function getCompany(arr) {
+    const jobsList = [];
+    arr.forEach(person => jobsList.push(person.jobs));
+    const flattenedJobsList = jobsList.flat();
+
+    const groupedJobs = flattenedJobsList.reduce((acc, object) => {
+        let key = object.company;
+        if (!acc[key]) {
+            acc[key] = []
+        }
+        acc[key].push(object);
+        return acc;
+
+    }, {});
+}
 
 // 	7. Zwracającą średnie wynagrodzenie pracownika w danej firmie.
 
@@ -257,5 +272,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getTheMostAndLeastPopulatedState(people));
+    console.log(getCompany(people));
 })
