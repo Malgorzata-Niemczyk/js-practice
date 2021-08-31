@@ -46,11 +46,10 @@ function getSpecificCountriesList(arr, compareNum) {
             : countriesRepsCounter[country] = 1
     )
 
-    return Object.entries(countriesRepsCounter).filter(([countryName, count]) => {
-        if (count > compareNum) {
-           return countryName
-        }
-    })
+    let resultList = [];
+    Object.entries(countriesRepsCounter).filter(([countryName, count]) => count > compareNum && resultList.push(countryName));
+    
+    return resultList;
 }
 
 
@@ -266,5 +265,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    // console.log(findTheMostRepeatedHouseNumbers(people));
+    console.log(getSpecificCountriesList(people, 60));
 })
