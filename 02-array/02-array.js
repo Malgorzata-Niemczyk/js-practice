@@ -87,9 +87,7 @@ function getPeopleWithTheLongestDescription(arr) {
 // 	9. Policz różne (unikalne) słowa wykorzystane w polu description.
 function countUniqueWords(arr) {
     const wordsList = [];
-    
-    arr.forEach(person => wordsList.push(person.description.split(' ')));
-
+    arr.forEach(person => wordsList.push(person.description.replace(/[^a-zA-Z ]/g, "").toLocaleLowerCase().split(' ')));
     const flattenedWordsList = wordsList.flat();
     
     return flattenedWordsList.filter((value, index) => flattenedWordsList.indexOf(value) === index).length;
@@ -98,7 +96,7 @@ function countUniqueWords(arr) {
 // 	10. Które słowa powtarzały się najczęściej, a które najrzadziej.
 function findTheMostOrLeastRepeatedWords(arr) {
     const wordsList = [];
-    arr.forEach(person => wordsList.push(person.description.split(' ')));
+    arr.forEach(person => wordsList.push(person.description.replace(/[^a-zA-Z ]/g, "").toLocaleLowerCase().split(' ')));
     const flattenedWordsList = wordsList.flat();
 
     const wordsCounter = {};
@@ -272,5 +270,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getCompany(people));
+    console.log(findTheMostOrLeastRepeatedWords(people));
 })
