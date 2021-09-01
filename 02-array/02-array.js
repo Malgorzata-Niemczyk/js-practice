@@ -248,7 +248,7 @@ function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo)
 }
 
 // 	20. Które stany są najbardziej zaludnione, a które najmniej?
-function getTheMostAndLeastPopulatedState(arr) {
+function getTheMostAndLeastPopulatedState(arr, infoType) {
     const statesList = [];
     arr.forEach(person => statesList.push(person.actualAddress.state))
     
@@ -262,14 +262,15 @@ function getTheMostAndLeastPopulatedState(arr) {
     const maxCount = Math.max(...Object.values(statesRepsCounter));
     const minCount = Math.min(...Object.values(statesRepsCounter));
 
-    const stateWithMaxCount = Object.entries(statesRepsCounter).filter(([stateName, count]) => count === maxCount);
+    let resultList = [];
 
-    const stateWithMinCount = Object.entries(statesRepsCounter).filter(([stateName, count]) => count === minCount);
-
-    return {
-        stateWithMaxCount,
-        stateWithMinCount
+    if (infoType === 'the most populated states') {
+        Object.entries(statesRepsCounter).filter(([stateName, count]) => count === maxCount && resultList.push(stateName));
+    } else if (infoType === 'the least populated states') {
+        Object.entries(statesRepsCounter).filter(([stateName, count]) => count === minCount && resultList.push(stateName));
     }
+
+    return resultList;
 }
 
 
@@ -278,5 +279,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getSpecificCountriesList(people, 70, 'lessThan'));
+    console.log(getTheMostAndLeastPopulatedState(people, 'the most populated states'));
 })
