@@ -51,6 +51,20 @@ function getAverageWeight(arr, raceName) {
 // 	6. Policz łączną liczbę kończyn danego rodzaju zwierząt 
 
 // 	7. Policz stosunek liczby samców do samic dla danego rodzaju zwierząt
+function getMaleFemaleRatio(arr, typeName) {
+    let malesList = [];
+    let femalesList = [];
+    arr.filter(animal => {
+        if (animal.kind === typeName & animal.sex === 'male') {
+            malesList.push(animal);
+        } else if (animal.kind === typeName & animal.sex === 'female') {
+            femalesList.push(animal);
+        }
+    })
+
+    let sexRatio = malesList.length * 100 / femalesList.length;
+    return (`${sexRatio.toFixed()} : 100`)
+}
 
 // 	8. Ile metanu wytworzą zwierzęta przez X lat życia
 
@@ -125,7 +139,7 @@ function getAverageAge(arr) {
 requestURL.onload = () => {
     const animals = requestURL.response;
     // console.log(animals);
-    console.log(getAverageAge(animals));
+    console.log(getMaleFemaleRatio(animals, 'chicken'));
     
 }
 
