@@ -218,12 +218,13 @@ function getPeopleLivingOnTheSameStreet(arr, streetName) {
 // 	18. Jakie zdanie/zdania były najdłuższe (description)?
 function findTheLongestSentence(arr) {
     const sentencesList = [];
-    arr.forEach(person => sentencesList.push(person.description));
-
-    const sentencesLengthsArr = sentencesList.map(sentence => sentence.length);
+    arr.forEach(person => sentencesList.push(person.description.split('. ')));
+    const flattenedSentencesList = sentencesList.flat();
+    
+    const sentencesLengthsArr = flattenedSentencesList.map(sentence => sentence.length);
     const maxLength = Math.max(...sentencesLengthsArr);
 
-    return sentencesList.filter(sentence => sentence.length === maxLength);
+    return flattenedSentencesList.filter(sentence => sentence.length === maxLength);
 }
 
 // 	19. Jakie słowa mają liczbę znaków pomiędzy X a Y (description)?
@@ -270,5 +271,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(findTheMostOrLeastRepeatedWords(people));
+    console.log(findTheLongestSentence(people));
 })
