@@ -35,7 +35,7 @@ function getNumOfPeopleLivingInParticularCountry(arr, countryName) {
 
 
 // 	4. Zwracającą listę krajów, w których żyje więcej lub mniej ludzi niż X
-function getSpecificCountriesList(arr, compareNum) {
+function getSpecificCountriesList(arr, compareNum, comparisonType) {
     const countriesList = [];
     arr.forEach(person => countriesList.push(person.actualAddress.country));
 
@@ -47,7 +47,14 @@ function getSpecificCountriesList(arr, compareNum) {
     )
 
     let resultList = [];
-    Object.entries(countriesRepsCounter).filter(([countryName, count]) => count > compareNum && resultList.push(countryName));
+
+    if (comparisonType === 'moreThan') {
+        Object.entries(countriesRepsCounter).filter(([countryName, count]) => count > compareNum && resultList.push(countryName));
+    } 
+    
+    if (comparisonType === 'lessThan') {
+        Object.entries(countriesRepsCounter).filter(([countryName, count]) => count < compareNum && resultList.push(countryName));
+    }
     
     return resultList;
 }
@@ -271,5 +278,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(findTheLongestSentence(people));
+    console.log(getSpecificCountriesList(people, 70, 'lessThan'));
 })
