@@ -88,7 +88,7 @@ function getAverageEarnings(arr, companyName) {
     const salaryList = [];
     flattenedJobsList.filter(job => job.company === companyName && salaryList.push(job.salary.value));
 
-    return (salaryList.reduce((a, b) => (a + b / salaryList.length))).toFixed(2)
+    return (salaryList.reduce((a, b) => (a + b)) / salaryList.length).toFixed(2);
 }
 
 // 	8. Zwracającą osoby, które najwięcej o sobie opisały w polu description.
@@ -289,5 +289,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    // console.log(getAverageEarnings(people, 'Steinhatchee'));
+    console.log(getAverageEarnings(people, 'Steinhatchee'));
 })
