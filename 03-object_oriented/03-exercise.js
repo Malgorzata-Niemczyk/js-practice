@@ -45,12 +45,6 @@ function getAverageWeight(arr, raceName) {
 }
 
 // 	4. Wylicz średnią długość życia danej rasy
-function getAverageLifeSpan(arr, raceName) {
-    let total = 0;
-    const filteredAnimalsArr = arr.filter(animal => animal.race === raceName && (total += animal.age));
-
-    return (total / filteredAnimalsArr.length).toFixed(2);
-}
 
 // 	5. Policz łączną liczbę kończyn (pomijając skrzydła) zwierząt
 
@@ -61,7 +55,12 @@ function getAverageLifeSpan(arr, raceName) {
 // 	8. Ile metanu wytworzą zwierzęta przez X lat życia
 
 // 	9. Podaj średni wiek zwierząt
+function getAverageAge(arr) {
+    let total = 0;
+    arr.forEach(animal => total += animal.age);
 
+    return (total / arr.length).toFixed(2); 
+}
 
 
 
@@ -126,7 +125,7 @@ function getAverageLifeSpan(arr, raceName) {
 requestURL.onload = () => {
     const animals = requestURL.response;
     // console.log(animals);
-    console.log(getAverageLifeSpan(animals, 'faerole'));
+    console.log(getAverageAge(animals));
     
 }
 
