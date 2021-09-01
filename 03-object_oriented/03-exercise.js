@@ -37,8 +37,20 @@ function getSpecificAnimalsRace(arr, kindName) {
 }
 
 // 	3. Wylicz średnią wagę zwierząt danej rasy
+function getAverageWeight(arr, raceName) {
+    const total = 0;
+    const filteredAnimalsArr = arr.filter(animal => animal.race === raceName && (total += animal.weight));
+
+   return (total / filteredAnimalsArr.length).toFixed(2); 
+}
 
 // 	4. Wylicz średnią długość życia danej rasy
+function getAverageLifeSpan(arr, raceName) {
+    let total = 0;
+    const filteredAnimalsArr = arr.filter(animal => animal.race === raceName && (total += animal.age));
+
+    return (total / filteredAnimalsArr.length).toFixed(2);
+}
 
 // 	5. Policz łączną liczbę kończyn (pomijając skrzydła) zwierząt
 
@@ -114,7 +126,7 @@ function getSpecificAnimalsRace(arr, kindName) {
 requestURL.onload = () => {
     const animals = requestURL.response;
     // console.log(animals);
-    // console.log(getSpecificAnimalsRace(animals, 'świnia'));
+    console.log(getAverageLifeSpan(animals, 'faerole'));
     
 }
 
