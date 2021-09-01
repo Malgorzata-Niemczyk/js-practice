@@ -60,7 +60,7 @@ function getSpecificCountriesList(arr, compareNum, comparisonType) {
 }
 
 
-// 	5. Zwracającą imiona, osób pracująćych w największej lub najmniejszej firmie w danym czasie.
+// 	5. Zwracającą imiona, osób pracujących w największej lub najmniejszej firmie w danym czasie.
 
 // 	6. Zwracającą firmę, która płaci w sumie najwięcej lub najmniej swoim pracownikom.
 function getCompany(arr) {
@@ -77,9 +77,19 @@ function getCompany(arr) {
         return acc;
 
     }, {});
-}
+} // the solution is not finished yet
 
 // 	7. Zwracającą średnie wynagrodzenie pracownika w danej firmie.
+function getAverageEarnings(arr, companyName) {
+    const jobsList = [];
+    arr.forEach(person => jobsList.push(person.jobs));
+    const flattenedJobsList = jobsList.flat();
+
+    const salaryList = [];
+    flattenedJobsList.filter(job => job.company === companyName && salaryList.push(job.salary.value));
+
+    return (salaryList.reduce((a, b) => (a + b / salaryList.length))).toFixed(2)
+}
 
 // 	8. Zwracającą osoby, które najwięcej o sobie opisały w polu description.
 function getPeopleWithTheLongestDescription(arr) {
@@ -136,7 +146,7 @@ function groupByCurrentAddress(arr) {
     }, {})
 }
 
-// 	12. Jakie numery domów najczęściej się potwarzały.
+// 	12. Jakie numery domów najczęściej się powtarzały.
 function findTheMostRepeatedHouseNumbers(arr) {
     const houseNumbersList = [];
 
@@ -279,5 +289,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getTheMostAndLeastPopulatedState(people, 'the most populated states'));
+    // console.log(getAverageEarnings(people, 'Steinhatchee'));
 })
