@@ -91,8 +91,24 @@ function getAverageAge(arr) {
 // 	6. Jaki jest stosunek samców do samic piskląt
 
 // 	7. Jaka jest łączna waga wszystkich kur samic
+function totalFemalesWeight(arr) {
+    let totalWeight = 0;
+    arr.filter(animal => {
+        if (animal.kind === 'chicken' && animal.sex === 'female') {
+            totalWeight += animal.weight;
+        }
+    })
+
+    return (totalWeight).toFixed(2)
+}
 
 // 	8. Jaka jest średnia waga wszystkich kur
+function totalFemalesWeight(arr) {
+    let totalWeight = 0;
+    const chickensList = arr.filter(animal => animal.kind === 'chicken' && (totalWeight += animal.weight));
+    
+    return (totalWeight / chickensList.length).toFixed(2);
+}
 
 // 	9. Jaka jest średnia waga kur niosek
 
@@ -104,7 +120,7 @@ function getAverageAge(arr) {
 
 // 	1. Policz ile mleka dadzą krowy mleczne przez dzień
 
-// 	2. Ile kg karmy potrzeby by wykarmić wszystkie krowy
+// 	2. Ile kg karmy potrzeba, by wykarmić wszystkie krowy
 
 // 	3. Jaki jest stosunek byków do krów?
 
@@ -139,7 +155,7 @@ function getAverageAge(arr) {
 requestURL.onload = () => {
     const animals = requestURL.response;
     // console.log(animals);
-    console.log(getMaleFemaleRatio(animals, 'chicken'));
+    console.log(totalFemalesWeight(animals));
     
 }
 
