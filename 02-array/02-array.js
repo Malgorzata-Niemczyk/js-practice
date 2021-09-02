@@ -63,7 +63,10 @@ function getSpecificCountriesList(arr, compareNum, comparisonType) {
 // 	5. Zwracającą imiona, osób pracujących w największej lub najmniejszej firmie w danym czasie.
 
 // 	6. Zwracającą firmę, która płaci w sumie najwięcej lub najmniej swoim pracownikom.
+// **** companies names: Advance, Beason, Conway, Kohatk, Leming, Roeville, Roeville, Steinhatchee, Witmer;
 function getCompany(arr) {
+    let totalSalary = 0;
+
     const jobsList = [];
     arr.forEach(person => jobsList.push(person.jobs));
     const flattenedJobsList = jobsList.flat();
@@ -73,11 +76,21 @@ function getCompany(arr) {
         if (!acc[key]) {
             acc[key] = []
         }
-        acc[key].push(object);
-        return acc;
 
+        acc[key].push(object.salary.value);
+        return acc;
     }, {});
-} // the solution is not finished yet
+
+    const jobSalaryPairs = [];
+    Object.entries(groupedJobs).forEach(([companyName, salariesArr]) => {
+        salariesArr.forEach(salary => totalSalary += salary);
+        jobSalaryPairs.push([companyName, totalSalary]);
+    })
+
+    const transformedJobSalaryPairs = Object.fromEntries(jobSalaryPairs);
+    // console.log(transformedJobSalaryPairs)
+    
+} 
 
 // 	7. Zwracającą średnie wynagrodzenie pracownika w danej firmie.
 function getAverageEarnings(arr, companyName) {
@@ -289,5 +302,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getAverageEarnings(people, 'Steinhatchee'));
+    console.log(getCompany(people));
 })
