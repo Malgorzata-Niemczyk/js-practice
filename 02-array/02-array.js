@@ -88,8 +88,11 @@ function getCompany(arr) {
     })
 
     const transformedJobSalaryPairs = Object.fromEntries(jobSalaryPairs);
-    // console.log(transformedJobSalaryPairs)
+    // console.log(transformedJobSalaryPairs);
     
+    const salariesSums = Object.values(transformedJobSalaryPairs);
+    const maxSum = Math.max(...salariesSums);
+    const minSum = Math.min(...salariesSums);
 } 
 
 // 	7. Zwracającą średnie wynagrodzenie pracownika w danej firmie.
