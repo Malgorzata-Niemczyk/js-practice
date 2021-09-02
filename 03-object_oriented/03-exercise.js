@@ -111,10 +111,29 @@ function totalFemalesWeight(arr) {
 }
 
 // 	9. Jaka jest średnia waga kur niosek
+function getAverageWeightOfNioski(arr) {
+    let weightsList = [];
+    arr.forEach(animal => animal.type === 'nioska' && weightsList.push(animal.weight));
+
+    return (weightsList.reduce((a, b) => a + b) / weightsList.length).toFixed(2);
+}
 
 // 	10. Jaka jest średnia waga kur mięsnych
+function getAverageWeightOfMiesne(arr) {
+    let weightsList = [];
+    arr.forEach(animal => animal.type === 'mięsna' && weightsList.push(animal.weight));
+
+    return (weightsList.reduce((a, b) => a + b) / weightsList.length).toFixed(2);
+
+}
 
 // 	11. Średni wiek kur względem typu ('mięsna' lub 'nioska', wybierane przez użytkownika)
+function getAverageWeightOfCertainChickenTypes(arr, chickenType) {
+    let totalWeight = 0;
+    const chickensList = arr.filter(animal => animal.type === chickenType && (totalWeight += animal.weight))
+
+    return (totalWeight / chickensList.length).toFixed(2);
+}
 
 
 
@@ -155,7 +174,7 @@ function totalFemalesWeight(arr) {
 requestURL.onload = () => {
     const animals = requestURL.response;
     // console.log(animals);
-    console.log(totalFemalesWeight(animals));
+    console.log(getAverageWeightOfNioski(animals));
     
 }
 
