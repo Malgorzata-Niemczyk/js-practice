@@ -198,22 +198,34 @@ function getTheHighestOrLowestNumOfPeopleWorking(arr) {
     arr.forEach(person => jobsList.push(person.jobs));
     const flattenedJobsList = jobsList.flat(2);
 
-    const yearCounter = {};
+    let yearsBetweenArr = [];
     flattenedJobsList.forEach(jobItem => {
-        yearCounter[new Date(jobItem.startedAt).getFullYear()] 
-            ? yearCounter[new Date(jobItem.startedAt).getFullYear()]++ 
-            : yearCounter[new Date(jobItem.startedAt).getFullYear()] = 1});
+        let startYear = new Date(jobItem.startedAt).getFullYear();
+        let endYear = new Date(jobItem.endedAt).getFullYear();
+        
+        for (let i = startYear; i <= endYear; i++) {
+            yearsBetweenArr.push(i);
+        }
+    });
+    
+    const yearsCounter = {};
+    yearsBetweenArr.forEach(year =>
+        yearsCounter[year] ? yearsCounter[year]++ : yearsCounter[year] = 1
+    )
 
-    let maxCount = Math.max(...Object.values(yearCounter));
-    let minCount = Math.min(...Object.values(yearCounter));
+    let maxCount = Math.max(...Object.values(yearsCounter));
+    let minCount = Math.min(...Object.values(yearsCounter));
 
-   const yearsWithMaxCount = Object.entries(yearCounter).filter(([year, count]) => count === maxCount);
-   const yearsWithMinCount = Object.entries(yearCounter).filter(([year, count]) => count === minCount);
+    let yearsWithMaxCountResult = [];
+    let yearsWithMinCountResult = [];
+    
+    Object.entries(yearsCounter).filter(([year, count]) => count === maxCount && yearsWithMaxCountResult.push(year));
+    Object.entries(yearsCounter).filter(([year, count]) => count === minCount && yearsWithMinCountResult.push(year));
 
-   return {
-        yearsWithMaxCount,
-        yearsWithMinCount
-   }
+    return {
+        yearsWithMaxCountResult,
+        yearsWithMinCountResult
+    }
 }
 
 // 	15. Informującą ile osób pracowało w danym roku.
@@ -313,5 +325,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getCompany(people, "the lowest paying companies"));
+    console.log(getTheHighestOrLowestNumOfPeopleWorking(people));
 })
