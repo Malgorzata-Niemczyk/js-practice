@@ -64,7 +64,7 @@ function getSpecificCountriesList(arr, compareNum, comparisonType) {
 
 // 	6. Zwracającą firmę, która płaci w sumie najwięcej lub najmniej swoim pracownikom.
 // **** companies names: Advance, Beason, Conway, Kohatk, Leming, Roeville, Roeville, Steinhatchee, Witmer;
-function getCompany(arr) {
+function getCompany(arr, searchedInfo) {
     let totalSalary = 0;
 
     const jobsList = [];
@@ -88,11 +88,19 @@ function getCompany(arr) {
     })
 
     const transformedJobSalaryPairs = Object.fromEntries(jobSalaryPairs);
-    // console.log(transformedJobSalaryPairs);
     
     const salariesSums = Object.values(transformedJobSalaryPairs);
     const maxSum = Math.max(...salariesSums);
     const minSum = Math.min(...salariesSums);
+
+    let searchedCompany = [];
+    if (searchedInfo === "the highest paying companies") {
+        Object.entries(transformedJobSalaryPairs).filter(([company, sum]) => sum === maxSum && searchedCompany.push(company))
+    } else if (searchedInfo = "the lowest paying company") {
+        Object.entries(transformedJobSalaryPairs).filter(([company, sum]) => sum === minSum && searchedCompany.push(company))
+    }
+
+    return searchedCompany;
 } 
 
 // 	7. Zwracającą średnie wynagrodzenie pracownika w danej firmie.
@@ -305,5 +313,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getCompany(people));
+    console.log(getCompany(people, "the lowest paying companies"));
 })
