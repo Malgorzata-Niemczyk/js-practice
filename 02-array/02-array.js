@@ -191,6 +191,34 @@ function findTheMostRepeatedHouseNumbers(arr) {
 }
 
 // 	13. Zwracającą ludzi, którzy mieli ciągłość pracy (tj. nie było ani jednego dnia przerwy pomiędzy pracami).
+function getPeopleWithContinuosWork(arr) {
+    arr.forEach(person => {
+        if (person.jobs.length > 1) {
+            const sortedArr = person.jobs.sort((a, b) => {
+                let propertyA = a.startedAt;
+                let propertyB = b.startedAt;
+        
+                if (propertyA > propertyB) {
+                    return 1;
+                } else if (propertyA < propertyB) {
+                    return -1;
+                } else {
+                    return 0
+                }
+            })
+           
+            sortedArr.filter(job => {
+                const datesDiff = new Date(job.startedAt).getTime() - new Date(job.endedAt).getTime();
+
+                const dayInMilisec = 86400000;
+
+                if (datesDiff <= dayInMilisec) {
+                    return `${person.firstname} ${person.surname}`
+                }
+            })
+        }
+    })
+} //***solution not finished yet
 
 // 	14. W którym roku pracowało najwięcej ludzi a w którym najmniej.
 function getTheHighestOrLowestNumOfPeopleWorking(arr) {
@@ -218,7 +246,7 @@ function getTheHighestOrLowestNumOfPeopleWorking(arr) {
 
     let yearsWithMaxCountResult = [];
     let yearsWithMinCountResult = [];
-    
+
     Object.entries(yearsCounter).filter(([year, count]) => count === maxCount && yearsWithMaxCountResult.push(year));
     Object.entries(yearsCounter).filter(([year, count]) => count === minCount && yearsWithMinCountResult.push(year));
 
@@ -253,7 +281,7 @@ function sortPeopleByGivenProperty(arr, propertyName) {
             return 0
         }
     });
-} // works for the firstname and surname
+} // ***works for the firstname and surname
 
 // 	17. Czy ktoś mieszka na tej samej ulicy, a jeżeli tak, to kto?
 function getPeopleLivingOnTheSameStreet(arr, streetName) {
@@ -325,5 +353,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getTheHighestOrLowestNumOfPeopleWorking(people));
+    console.log(getPeopleWithContinuosWork(people));
 })
