@@ -19,25 +19,20 @@ function findUniqueCountriesWherePeopleLivedBefore(arr) {
 
 // 	2. Zwracającą listę unikalnych nazw krajów w których ludzie żyją aktualnie.
 function findUniqueCountriesWherePeopleCurrentlyLive(arr) {
-    const countriesList = [];
-    arr.map(person => countriesList.push(person.actualAddress.country));
+    const countriesList = arr.map(person => person.actualAddress.country);
 
     return countriesList.filter((value, index) => countriesList.indexOf(value) == index);
 }
 
 // 	3. Zwracającą liczbę aktualnie mieszkających ludzi w danym kraju.
 function getNumOfPeopleLivingInParticularCountry(arr, countryName) {
-    const currentAddressesList = [];
-    arr.map(person => currentAddressesList.push(person.actualAddress));
-
-    return currentAddressesList.filter(addressDetails => addressDetails.country === countryName).length
+    return arr.map(person => person.actualAddress).filter(addressDetails => addressDetails.country === countryName).length
 }
 
 
 // 	4. Zwracającą listę krajów, w których żyje więcej lub mniej ludzi niż X
 function getSpecificCountriesList(arr, compareNum, comparisonType) {
-    const countriesList = [];
-    arr.map(person => countriesList.push(person.actualAddress.country));
+    const countriesList = arr.map(person => person.actualAddress.country);
 
     const countriesRepsCounter = {};
     countriesList.map(country => 
@@ -100,8 +95,7 @@ function getNames(arr, givenYear) {
 function getCompany(arr, searchedInfo) {
     let totalSalary = 0;
 
-    const jobsList = [];
-    arr.map(person => jobsList.push(person.jobs));
+    const jobsList = arr.map(person => person.jobs);
     const flattenedJobsList = jobsList.flat();
 
     const groupedJobs = flattenedJobsList.reduce((acc, object) => {
@@ -140,8 +134,7 @@ function getCompany(arr, searchedInfo) {
 
 // 	7. Zwracającą średnie wynagrodzenie pracownika w danej firmie.
 function getAverageEarnings(arr, companyName) {
-    const jobsList = [];
-    arr.map(person => jobsList.push(person.jobs));
+    const jobsList = arr.map(person => person.jobs);
     const flattenedJobsList = jobsList.flat();
 
     const salaryList = [];
@@ -152,8 +145,7 @@ function getAverageEarnings(arr, companyName) {
 
 // 	8. Zwracającą osoby, które najwięcej o sobie opisały w polu description.
 function getPeopleWithTheLongestDescription(arr) {
-    const descriptionsList = [];
-    arr.map(person => descriptionsList.push(person.description));
+    const descriptionsList = arr.map(person => person.description);
 
     return arr.filter(person => person.description.length === getTheMaximumValue(descriptionsList));
 }
@@ -258,8 +250,7 @@ function getPeopleWithContinuosWork(arr) {
 
 // 	14. W którym roku pracowało najwięcej ludzi a w którym najmniej.
 function getTheHighestOrLowestNumOfPeopleWorking(arr) {
-    const jobsList = [];
-    arr.map(person => jobsList.push(person.jobs));
+    const jobsList = arr.map(person => person.jobs);
     const flattenedJobsList = jobsList.flat();
 
     let yearsBetweenArr = [];
@@ -294,8 +285,7 @@ function getTheHighestOrLowestNumOfPeopleWorking(arr) {
 
 // 	15. Informującą ile osób pracowało w danym roku.
 function findNumOfPeopleWorkingInSpecificYear(arr, year) {
-    const jobsList = [];
-    arr.map(person => jobsList.push(person.jobs));
+    const jobsList = arr.map(person => person.jobs);
     const flattenedJobsList = jobsList.flat();
     console.log(flattenedJobsList)
     
@@ -323,7 +313,6 @@ function sortPeopleByGivenProperty(arr, propertyName) {
 // 	17. Czy ktoś mieszka na tej samej ulicy, a jeżeli tak, to kto?
 function getPeopleLivingOnTheSameStreet(arr, street, city, state, country) {
     const peoplesNames = [];
-    // console.log(arr)
 
     arr.forEach(person => {
         if (person.actualAddress.street === street && person.actualAddress.city === city && person.actualAddress.state === state && person.actualAddress.country === country) {
@@ -337,7 +326,7 @@ function getPeopleLivingOnTheSameStreet(arr, street, city, state, country) {
 // 	18. Jakie zdanie/zdania były najdłuższe (description)?
 function findTheLongestSentence(arr) {
     const sentencesList = [];
-    arr.map(person => sentencesList.push(person.description.split('. ')));
+    arr.forEach(person => sentencesList.push(person.description.split('. ')));
     const flattenedSentencesList = sentencesList.flat();
     
     return flattenedSentencesList.filter(sentence => sentence.length === getTheMaximumValue(flattenedSentencesList));
@@ -346,7 +335,7 @@ function findTheLongestSentence(arr) {
 // 	19. Jakie słowa mają liczbę znaków pomiędzy X a Y (description)?
 function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo) {
     const wordsList = [];
-    arr.map(person => wordsList.push(person.description.replace(/[^a-zA-Z ]/g, "").toLocaleLowerCase().split(' ')));
+    arr.forEach(person => wordsList.push(person.description.replace(/[^a-zA-Z ]/g, "").toLocaleLowerCase().split(' ')));
     const flattenedWordsList = wordsList.flat();
 
     return flattenedWordsList.filter((word, index) => {
@@ -358,8 +347,7 @@ function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo)
 
 // 	20. Które stany są najbardziej zaludnione, a które najmniej?
 function getTheMostAndLeastPopulatedState(arr, infoType) {
-    const statesList = [];
-    arr.map(person => statesList.push(person.actualAddress.state))
+    const statesList = arr.map(person => person.actualAddress.state)
     
     const statesRepsCounter = {};
     statesList.map(state => {
