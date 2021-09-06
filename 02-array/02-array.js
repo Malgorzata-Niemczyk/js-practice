@@ -50,12 +50,12 @@ function getSpecificCountriesList(arr, compareNum, comparisonType) {
 
     if (comparisonType === 'moreThan') {
         Object.entries(countriesRepsCounter).filter(([countryName, count]) => count > compareNum && resultList.push(countryName));
-    } 
-    
-    if (comparisonType === 'lessThan') {
+    } else if (comparisonType === 'lessThan') {
         Object.entries(countriesRepsCounter).filter(([countryName, count]) => count < compareNum && resultList.push(countryName));
+    } else {
+        throw new Error('Sorry, this property does not exist')
     }
-    
+
     return resultList;
 }
 
@@ -131,6 +131,8 @@ function getCompany(arr, searchedInfo) {
         Object.entries(transformedJobSalaryPairs).filter(([company, sum]) => sum === maxSum && searchedCompany.push(company))
     } else if (searchedInfo = "the lowest paying company") {
         Object.entries(transformedJobSalaryPairs).filter(([company, sum]) => sum === minSum && searchedCompany.push(company))
+    } else {
+        throw new Error('Sorry, this property does not exisit')
     }
 
     return searchedCompany;
@@ -213,7 +215,10 @@ function findTheMostRepeatedHouseNumbers(arr) {
     });
 
     const houseNumsRepsCounter = {};
-    houseNumbersList.forEach(houseNumber => houseNumsRepsCounter[houseNumber] ? houseNumsRepsCounter[houseNumber]++ : houseNumsRepsCounter[houseNumber] = 1);
+    houseNumbersList.map(houseNumber => 
+        houseNumsRepsCounter[houseNumber] 
+            ? houseNumsRepsCounter[houseNumber]++ 
+            : houseNumsRepsCounter[houseNumber] = 1);
 
     let maxCount = Math.max(...Object.values(houseNumsRepsCounter));
 
@@ -347,7 +352,6 @@ function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo)
     const wordsList = [];
     arr.map(person => wordsList.push(person.description.replace(/[^a-zA-Z ]/g, "").toLocaleLowerCase().split(' ')));
     const flattenedWordsList = wordsList.flat();
-    console.log(flattenedWordsList)
 
     return flattenedWordsList.filter((word, index) => {
         if (word.length >= charactersNumFrom && word.length <= charactersNumTo && flattenedWordsList.indexOf(word) === index) {
@@ -377,6 +381,8 @@ function getTheMostAndLeastPopulatedState(arr, infoType) {
         Object.entries(statesRepsCounter).filter(([stateName, count]) => count === maxCount && resultList.push(stateName));
     } else if (infoType === 'the least populated states') {
         Object.entries(statesRepsCounter).filter(([stateName, count]) => count === minCount && resultList.push(stateName));
+    } else {
+        throw new Error('Sorry, this property does not exist');
     }
 
     return resultList;
@@ -388,5 +394,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(findWordsWithinCharactersRange(people, 1, 3));
+    console.log(getTheMostAndLeastPopulatedState(people, 'the most populated states'));
 })
