@@ -154,7 +154,7 @@ function getAverageEarnings(arr, companyName) {
 function getPeopleWithTheLongestDescription(arr) {
     const descriptionsList = [];
     arr.map(person => descriptionsList.push(person.description));
-    
+
     const descriptionMaxLength = descriptionsList.map(sentence => sentence.length).reduce((a, b) => Math.max(a, b));
 
     return arr.filter(person => person.description.length === descriptionMaxLength);
@@ -262,7 +262,7 @@ function getPeopleWithContinuosWork(arr) {
 function getTheHighestOrLowestNumOfPeopleWorking(arr) {
     const jobsList = [];
     arr.map(person => jobsList.push(person.jobs));
-    const flattenedJobsList = jobsList.flat(2);
+    const flattenedJobsList = jobsList.flat();
 
     let yearsBetweenArr = [];
     flattenedJobsList.map(jobItem => {
@@ -323,16 +323,17 @@ function sortPeopleByGivenProperty(arr, propertyName) {
 } // ***works for the firstname and surname
 
 // 	17. Czy ktoś mieszka na tej samej ulicy, a jeżeli tak, to kto?
-function getPeopleLivingOnTheSameStreet(arr, streetName) {
+function getPeopleLivingOnTheSameStreet(arr, street, city, state, country) {
     const peoplesNames = [];
+    // console.log(arr)
 
     arr.forEach(person => {
-        if (person.actualAddress.street === streetName) {
+        if (person.actualAddress.street === street && person.actualAddress.city === city && person.actualAddress.state === state && person.actualAddress.country === country) {
             peoplesNames.push(`${person.surname} ${person.firstname}`);
         }
     })
 
-    return peoplesNames;
+    return peoplesNames.length > 1 ? peoplesNames : [];
 }
 
 // 	18. Jakie zdanie/zdania były najdłuższe (description)?
@@ -394,5 +395,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getPeopleWithTheLongestDescription(people));
+    console.log(getPeopleLivingOnTheSameStreet(people, 'Bartlett Street', 'Conway', 'District Of Columbia', 'Bulgaria'));
 })
