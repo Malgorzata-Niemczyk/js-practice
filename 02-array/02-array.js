@@ -154,10 +154,10 @@ function getAverageEarnings(arr, companyName) {
 function getPeopleWithTheLongestDescription(arr) {
     const descriptionsList = [];
     arr.map(person => descriptionsList.push(person.description));
-    const descriptionsLengthsArr = descriptionsList.map(sentence => sentence.length);
-    const maxLength = Math.max(...descriptionsLengthsArr);
+    
+    const descriptionMaxLength = descriptionsList.map(sentence => sentence.length).reduce((a, b) => Math.max(a, b));
 
-    return arr.filter(person => person.description.length === maxLength);
+    return arr.filter(person => person.description.length === descriptionMaxLength);
 }
 
 // 	9. Policz różne (unikalne) słowa wykorzystane w polu description.
@@ -394,5 +394,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getTheMostAndLeastPopulatedState(people, 'the most populated states'));
+    console.log(getPeopleWithTheLongestDescription(people));
 })
