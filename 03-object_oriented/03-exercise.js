@@ -156,6 +156,12 @@ function getAverageWeightOfCertainChickenTypes(arr, chickenType) {
 // 	9. Czy jest wystarczająca liczba byków, tak by każdy byk mógł pokryć 2 krowy? Jeżeli nie, zwróć informację, których zwierząt jest za mało.
 
 // 	10. Średni wiek krów względem typu ('mięsna' lub 'nioska', wybierane przez użytkownika)
+function averagCowsAge(arr, cowType) {
+    const weightsArr = [];
+    const cowsList = arr.filter(animal => animal.type === cowType && weightsArr.push(animal.weight));
+
+    return (weightsArr.reduce((a, b) => a + b) / cowsList.length).toFixed(2);
+}
 
 
 
@@ -174,7 +180,7 @@ function getAverageWeightOfCertainChickenTypes(arr, chickenType) {
 requestURL.onload = () => {
     const animals = requestURL.response;
     // console.log(animals);
-    console.log(getAverageWeightOfNioski(animals));
+    console.log(averagCowsAge(animals, 'mleczna'));
     
 }
 
