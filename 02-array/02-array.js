@@ -93,21 +93,6 @@ function getNames(arr, givenYear) {
             )
         })
     })
-
-
-    // const yearsCounter = {};
-    // yearsBetweenArr.forEach(year =>
-    //     yearsCounter[year] ? yearsCounter[year]++ : yearsCounter[year] = 1
-    // )
-
-    // let maxCount = Math.max(...Object.values(yearsCounter));
-    // let minCount = Math.min(...Object.values(yearsCounter));
-
-    // let yearsWithMaxCountResult = [];
-    // let yearsWithMinCountResult = [];
-
-    // Object.entries(yearsCounter).filter(([year, count]) => count === maxCount && yearsWithMaxCountResult.push(year));
-    // Object.entries(yearsCounter).filter(([year, count]) => count === minCount && yearsWithMinCountResult.push(year));
 }
 
 // 	6. Zwracającą firmę, która płaci w sumie najwięcej lub najmniej swoim pracownikom.
