@@ -12,7 +12,7 @@ requestURL.send();
 // 	1. Zwracającą listę unikalnych nazw krajów w których żyli ludzie.
 function findUniqueCountriesWherePeopleLivedBefore(arr) {
     const countriesList = [];
-    arr.forEach(person => person.addresses.forEach(details => countriesList.push(details.country)))
+    arr.map(person => person.addresses.map(details => countriesList.push(details.country)))
 
     return countriesList.filter((value, index) => countriesList.indexOf(value) === index)
 }
@@ -20,7 +20,7 @@ function findUniqueCountriesWherePeopleLivedBefore(arr) {
 // 	2. Zwracającą listę unikalnych nazw krajów w których ludzie żyją aktualnie.
 function findUniqueCountriesWherePeopleCurrentlyLive(arr) {
     const countriesList = [];
-    arr.forEach(person => countriesList.push(person.actualAddress.country));
+    arr.map(person => countriesList.push(person.actualAddress.country));
 
     return countriesList.filter((value, index) => countriesList.indexOf(value) == index);
 }
@@ -28,7 +28,7 @@ function findUniqueCountriesWherePeopleCurrentlyLive(arr) {
 // 	3. Zwracającą liczbę aktualnie mieszkających ludzi w danym kraju.
 function getNumOfPeopleLivingInParticularCountry(arr, countryName) {
     const currentAddressesList = [];
-    arr.forEach(person => currentAddressesList.push(person.actualAddress));
+    arr.map(person => currentAddressesList.push(person.actualAddress));
 
     return currentAddressesList.filter(addressDetails => addressDetails.country === countryName).length
 }
@@ -37,10 +37,10 @@ function getNumOfPeopleLivingInParticularCountry(arr, countryName) {
 // 	4. Zwracającą listę krajów, w których żyje więcej lub mniej ludzi niż X
 function getSpecificCountriesList(arr, compareNum, comparisonType) {
     const countriesList = [];
-    arr.forEach(person => countriesList.push(person.actualAddress.country));
+    arr.map(person => countriesList.push(person.actualAddress.country));
 
     const countriesRepsCounter = {};
-    countriesList.forEach(country => 
+    countriesList.map(country => 
         countriesRepsCounter[country]
             ? countriesRepsCounter[country]++
             : countriesRepsCounter[country] = 1
@@ -63,7 +63,7 @@ function getSpecificCountriesList(arr, compareNum, comparisonType) {
 // 	5. Zwracającą imiona, osób pracujących w największej lub najmniejszej firmie w danym czasie.
 function getNames(arr, givenYear) {
     const jobsList = [];
-    arr.forEach(person => jobsList.push(person.jobs));
+    arr.map(person => jobsList.push(person.jobs));
     const flattenedJobsList = jobsList.flat();
 
     const groupedJobs = flattenedJobsList.reduce((acc, object) => {
@@ -77,8 +77,8 @@ function getNames(arr, givenYear) {
     }, {});
     // console.log(groupedJobs)
     
-    Object.entries(groupedJobs).forEach(([company, arr]) => {
-        arr.forEach(jobItem => {
+    Object.entries(groupedJobs).map(([company, arr]) => {
+        arr.map(jobItem => {
             let yearsBetweenArr = [];
             let startYear = new Date(jobItem.startedAt).getFullYear();
             let endYear = new Date(jobItem.endedAt).getFullYear();
@@ -101,7 +101,7 @@ function getCompany(arr, searchedInfo) {
     let totalSalary = 0;
 
     const jobsList = [];
-    arr.forEach(person => jobsList.push(person.jobs));
+    arr.map(person => jobsList.push(person.jobs));
     const flattenedJobsList = jobsList.flat();
 
     const groupedJobs = flattenedJobsList.reduce((acc, object) => {
@@ -139,7 +139,7 @@ function getCompany(arr, searchedInfo) {
 // 	7. Zwracającą średnie wynagrodzenie pracownika w danej firmie.
 function getAverageEarnings(arr, companyName) {
     const jobsList = [];
-    arr.forEach(person => jobsList.push(person.jobs));
+    arr.map(person => jobsList.push(person.jobs));
     const flattenedJobsList = jobsList.flat();
 
     const salaryList = [];
@@ -151,7 +151,7 @@ function getAverageEarnings(arr, companyName) {
 // 	8. Zwracającą osoby, które najwięcej o sobie opisały w polu description.
 function getPeopleWithTheLongestDescription(arr) {
     const descriptionsList = [];
-    arr.forEach(person => descriptionsList.push(person.description));
+    arr.map(person => descriptionsList.push(person.description));
     const descriptionsLengthsArr = descriptionsList.map(sentence => sentence.length);
     const maxLength = Math.max(...descriptionsLengthsArr);
 
@@ -256,11 +256,11 @@ function getPeopleWithContinuosWork(arr) {
 // 	14. W którym roku pracowało najwięcej ludzi a w którym najmniej.
 function getTheHighestOrLowestNumOfPeopleWorking(arr) {
     const jobsList = [];
-    arr.forEach(person => jobsList.push(person.jobs));
+    arr.map(person => jobsList.push(person.jobs));
     const flattenedJobsList = jobsList.flat(2);
 
     let yearsBetweenArr = [];
-    flattenedJobsList.forEach(jobItem => {
+    flattenedJobsList.map(jobItem => {
         let startYear = new Date(jobItem.startedAt).getFullYear();
         let endYear = new Date(jobItem.endedAt).getFullYear();
         
@@ -270,7 +270,7 @@ function getTheHighestOrLowestNumOfPeopleWorking(arr) {
     });
     
     const yearsCounter = {};
-    yearsBetweenArr.forEach(year =>
+    yearsBetweenArr.map(year =>
         yearsCounter[year] ? yearsCounter[year]++ : yearsCounter[year] = 1
     )
 
@@ -292,8 +292,9 @@ function getTheHighestOrLowestNumOfPeopleWorking(arr) {
 // 	15. Informującą ile osób pracowało w danym roku.
 function findNumOfPeopleWorkingInSpecificYear(arr, year) {
     const jobsList = [];
-    arr.forEach(person => jobsList.push(person.jobs));
-    const flattenedJobsList = jobsList.flat(2);
+    arr.map(person => jobsList.push(person.jobs));
+    const flattenedJobsList = jobsList.flat();
+    console.log(flattenedJobsList)
     
     return flattenedJobsList.filter(jobItem => 
         new Date(jobItem.startedAt).getFullYear() === year
@@ -344,8 +345,9 @@ function findTheLongestSentence(arr) {
 // 	19. Jakie słowa mają liczbę znaków pomiędzy X a Y (description)?
 function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo) {
     const wordsList = [];
-    arr.forEach(person => wordsList.push(person.description.split(' ')));
+    arr.map(person => wordsList.push(person.description.replace(/[^a-zA-Z ]/g, "").toLocaleLowerCase().split(' ')));
     const flattenedWordsList = wordsList.flat();
+    console.log(flattenedWordsList)
 
     return flattenedWordsList.filter((word, index) => {
         if (word.length >= charactersNumFrom && word.length <= charactersNumTo && flattenedWordsList.indexOf(word) === index) {
@@ -357,10 +359,10 @@ function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo)
 // 	20. Które stany są najbardziej zaludnione, a które najmniej?
 function getTheMostAndLeastPopulatedState(arr, infoType) {
     const statesList = [];
-    arr.forEach(person => statesList.push(person.actualAddress.state))
+    arr.map(person => statesList.push(person.actualAddress.state))
     
     const statesRepsCounter = {};
-    statesList.forEach(state => {
+    statesList.map(state => {
         statesRepsCounter[state] 
             ? statesRepsCounter[state]++
             : statesRepsCounter[state] = 1
@@ -386,5 +388,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getNames(people, 2003));
+    console.log(findWordsWithinCharactersRange(people, 1, 3));
 })
