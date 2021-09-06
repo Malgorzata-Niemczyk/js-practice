@@ -155,9 +155,7 @@ function getPeopleWithTheLongestDescription(arr) {
     const descriptionsList = [];
     arr.map(person => descriptionsList.push(person.description));
 
-    const descriptionMaxLength = descriptionsList.map(description => description.length).reduce((a, b) => Math.max(a, b));
-
-    return arr.filter(person => person.description.length === descriptionMaxLength);
+    return arr.filter(person => person.description.length === getTheMaximumValue(descriptionsList));
 }
 
 // 	9. Policz różne (unikalne) słowa wykorzystane w polu description.
@@ -342,9 +340,7 @@ function findTheLongestSentence(arr) {
     arr.map(person => sentencesList.push(person.description.split('. ')));
     const flattenedSentencesList = sentencesList.flat();
     
-    const sentenceMaxLength = flattenedSentencesList.map(sentence => sentence.length).reduce((a, b) => Math.max(a, b));
-
-    return flattenedSentencesList.filter(sentence => sentence.length === sentenceMaxLength);
+    return flattenedSentencesList.filter(sentence => sentence.length === getTheMaximumValue(flattenedSentencesList));
 }
 
 // 	19. Jakie słowa mają liczbę znaków pomiędzy X a Y (description)?
@@ -388,11 +384,18 @@ function getTheMostAndLeastPopulatedState(arr, infoType) {
     return resultList;
 }
 
+// ************ Shared functions *****************//
+function getTheMaximumValue(itemsArr) {
+    return itemsArr.map(item => item.length).reduce((a, b) => Math.max(a, b));
+}
+
+
+
 
 ////
 requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(findTheLongestSentence(people));
+    console.log(getPeopleWithTheLongestDescription(people));
 })
