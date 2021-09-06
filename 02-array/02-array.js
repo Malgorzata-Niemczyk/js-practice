@@ -61,6 +61,54 @@ function getSpecificCountriesList(arr, compareNum, comparisonType) {
 
 
 // 	5. Zwracającą imiona, osób pracujących w największej lub najmniejszej firmie w danym czasie.
+function getNames(arr, givenYear) {
+    const jobsList = [];
+    arr.forEach(person => jobsList.push(person.jobs));
+    const flattenedJobsList = jobsList.flat();
+
+    const groupedJobs = flattenedJobsList.reduce((acc, object) => {
+        let key = object.company;
+        if (!acc[key]) {
+            acc[key] = []
+        }
+
+        acc[key].push(object);
+        return acc;
+    }, {});
+    // console.log(groupedJobs)
+    
+    Object.entries(groupedJobs).forEach(([company, arr]) => {
+        arr.forEach(jobItem => {
+            let yearsBetweenArr = [];
+            let startYear = new Date(jobItem.startedAt).getFullYear();
+            let endYear = new Date(jobItem.endedAt).getFullYear();
+
+            for (let i = startYear; i <= endYear; i++) {
+                yearsBetweenArr.push(i);
+            }
+
+            const yearsCounter = {};
+            yearsBetweenArr.forEach(year =>
+                yearsCounter[year] ? yearsCounter[year]++ : yearsCounter[year] = 1
+            )
+        })
+    })
+
+
+    // const yearsCounter = {};
+    // yearsBetweenArr.forEach(year =>
+    //     yearsCounter[year] ? yearsCounter[year]++ : yearsCounter[year] = 1
+    // )
+
+    // let maxCount = Math.max(...Object.values(yearsCounter));
+    // let minCount = Math.min(...Object.values(yearsCounter));
+
+    // let yearsWithMaxCountResult = [];
+    // let yearsWithMinCountResult = [];
+
+    // Object.entries(yearsCounter).filter(([year, count]) => count === maxCount && yearsWithMaxCountResult.push(year));
+    // Object.entries(yearsCounter).filter(([year, count]) => count === minCount && yearsWithMinCountResult.push(year));
+}
 
 // 	6. Zwracającą firmę, która płaci w sumie najwięcej lub najmniej swoim pracownikom.
 // **** companies names: Advance, Beason, Conway, Kohatk, Leming, Roeville, Roeville, Steinhatchee, Witmer;
@@ -353,5 +401,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getPeopleWithContinuosWork(people));
+    console.log(getNames(people, 2003));
 })
