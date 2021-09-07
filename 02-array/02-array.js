@@ -56,38 +56,40 @@ function getSpecificCountriesList(arr, compareNum, comparisonType) {
 
 
 // 	5. Zwracającą imiona, osób pracujących w największej lub najmniejszej firmie w danym czasie.
+
+const hasPersonWorkedInGivenYear = (person, year) => {
+    return person.jobs.some(job => workedInJobInGivenYear(job, year))
+}
+
+const workedInJobInGivenYear = (job, year) => {
+    return new Date(job.startedAt).getFullYear() <= year && new Date(job.endedAt).getFullYear() >= year
+}
+
+const getJobsAtYear = (person, year) => {
+    return person.jobs.filter(job => workedInJobInGivenYear(job, year));
+}
+
+const getCounterFn = (acc, curr, fieldName) => {
+    if (acc[curr[fieldName]]) {
+        acc[curr[fieldName]] += 1;
+    } else {
+        acc[curr[fieldName]] = 1;
+    }
+    return acc;
+}
+
+const getCounterForEmployeesInCompanyFn = (acc, curr) => {
+    return getCounterFn(acc, curr, 'company')
+    };
+
 function getNames(arr, givenYear) {
-    const jobsList = [];
-    arr.map(person => jobsList.push(person.jobs));
-    const flattenedJobsList = jobsList.flat();
-
-    const groupedJobs = flattenedJobsList.reduce((acc, object) => {
-        let key = object.company;
-        if (!acc[key]) {
-            acc[key] = []
-        }
-
-        acc[key].push(object);
-        return acc;
-    }, {});
-    // console.log(groupedJobs)
-    
-    Object.entries(groupedJobs).map(([company, arr]) => {
-        arr.map(jobItem => {
-            let yearsBetweenArr = [];
-            let startYear = new Date(jobItem.startedAt).getFullYear();
-            let endYear = new Date(jobItem.endedAt).getFullYear();
-
-            for (let i = startYear; i <= endYear; i++) {
-                yearsBetweenArr.push(i);
-            }
-
-            const yearsCounter = {};
-            yearsBetweenArr.forEach(year =>
-                yearsCounter[year] ? yearsCounter[year]++ : yearsCounter[year] = 1
-            )
-        })
-    })
+    // 1. Przefiltrowanie ludzi pracujacych w danym roku
+    // 2. Zakumulowal ludzi w danej firmie
+    // 3. Zwrocil najmniejsza i najwieksza
+    return arr.filter(p => hasPersonWorkedInGivenYear(p, givenYear))
+        .map(p => getJobsAtYear(p, givenYear))
+        .flat()
+        .reduce(getCounterForEmployeesInCompanyFn, {});
 }
 
 // 	6. Zwracającą firmę, która płaci w sumie najwięcej lub najmniej swoim pracownikom.
@@ -219,34 +221,31 @@ function findTheMostRepeatedHouseNumbers(arr) {
 }
 
 // 	13. Zwracającą ludzi, którzy mieli ciągłość pracy (tj. nie było ani jednego dnia przerwy pomiędzy pracami).
-function getPeopleWithContinuosWork(arr) {
-    arr.forEach(person => {
-        if (person.jobs.length > 1) {
-            const sortedArr = person.jobs.sort((a, b) => {
-                let propertyA = a.startedAt;
-                let propertyB = b.startedAt;
-        
-                if (propertyA > propertyB) {
-                    return 1;
-                } else if (propertyA < propertyB) {
-                    return -1;
-                } else {
-                    return 0
-                }
-            })
-           
-            sortedArr.filter(job => {
-                const datesDiff = new Date(job.startedAt).getTime() - new Date(job.endedAt).getTime();
-
-                const dayInMilisec = 86400000;
-
-                if (datesDiff <= dayInMilisec) {
-                    return `${person.firstname} ${person.surname}`
-                }
-            })
+const hasPersonContinuousWork = (p) => {
+    let isContinuous = true;
+    p.jobs.reduce((acc, curr) => {
+        if (new Date(acc.endedAt).getTime() - new Date(curr.startedAt).getTime() > 86400000) {
+            isContinuous = false;
         }
+        return curr;
+    }, p.jobs[0]);
+
+    return isContinuous;
+}
+
+function getPeopleWithContinuosWork(arr) {
+    // 1. Sortowanie prac pracownika
+    // 2. Sprawdzenie czy pracownik mial wiecej niz jedna prace
+        // Jezeli tak, to sprawdzamy czy jest ciaglosc, jezeli nie to jest ciagla praca
+
+    const jobSortFn = (prev, next) => new Date(prev.endedAt) > new Date(next.startedAt) ? 1 : -1;
+
+    return arr.map(p => {
+        p.jobs = sortPeople(p.jobs, jobSortFn);
+        return p;
     })
-} //***solution not finished yet
+    .filter(p => p.jobs.length === 1 || hasPersonContinuousWork(p))
+}
 
 // 	14. W którym roku pracowało najwięcej ludzi a w którym najmniej.
 function getTheHighestOrLowestNumOfPeopleWorking(arr) {
@@ -294,50 +293,46 @@ function findNumOfPeopleWorkingInSpecificYear(arr, year) {
 }
 
 // 	16. Sortującą ludzi wg imienia, nazwiska, kraj zamieszkania, bądź nazwy firmy dla której ostatnio pracowali bądź dalej pracują.
-const isSorted = (itemA, itemB) => {
-    if (itemA > itemB) {
-        return 1;
-    } else if (itemA < itemB) {
-        return -1;
-    } else {
-        return 0
-    }
+const sortPeople = (arr, sortFn) => {
+    return [...arr].sort(sortFn);
 }
 
+const getLastJob = (person) => {
+    if (!person.jobs.length) {
+        throw new Error (`Person does not have a job`);
+    }
+
+    return person.jobs.reduce((acc, curr) => 
+        new Date(acc.endedAt) < new Date(curr.startedAt) ? curr : acc    
+    , person.jobs[0])
+} 
+
 function sortPeopleByGivenProperty(arr, propertyName) {
-    if (propertyName === 'firstname' || 'surname') {
-        return [...arr].sort((a, b) => {
-            let propertyA = a[propertyName];
-            let propertyB = b[propertyName];
-        
-            return isSorted(propertyA, propertyB);
-        });
+    let comparator;
+
+    switch(propertyName) {
+        case 'firstname':
+        case 'surname':
+            comparator = (prev, next) =>
+            prev[propertyName] > next[propertyName] ? 1 : -1;
+            break;
+        case 'country':
+            comparator = ({actualAddress: preAddress}, {actualAddress: nextAddress}) => preAddress.country > nextAddress.country ? 1 : -1;
+            break;
+        case 'company':
+            comparator = (prev, next) => {
+
+                const prevCompany = getLastJob(prev).company;
+                const nextCompany = getLastJob(next).company
+
+                return prevCompany > nextCompany ? 1 : -1;
+            }
+            break;
+        default:
+            throw new Error(`Cannot sort by ${propertyName}`);
     }
 
-    if (propertyName === 'country') {
-        return [...arr].sort((a, b) => {
-            let propertyA = a.actualAddress.country;
-            let propertyB = b.actualAddress.country;
-
-            return isSorted(propertyA, propertyB);
-        })
-    }
-
-    if (propertyName === 'company') {
-        return [...arr].sort((a, b) => {
-            let propertyA = a.jobs.map(job => {
-                if (Math.max(new Date(job.endedAt))) {
-                    return job.company;
-                }
-            })
-            let propertyB = b.jobs.map(job => {
-                if (Math.max(new Date(job.endedAt))) {
-                    return job.company;
-                }
-            })
-            return isSorted(propertyA, propertyB);
-        });
-    }
+    return sortPeople(arr, comparator);
 }
 
 // 	17. Czy ktoś mieszka na tej samej ulicy, a jeżeli tak, to kto?
@@ -414,5 +409,8 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    // console.log(sortPeopleByGivenProperty(people, 'company'));
+    // console.log(getNames(people, 1995));
+    // console.table(sortPeopleByGivenProperty(people, 'company').map(p => getLastJob(p)))
+    // console.log(getPeopleWithContinuosWork(people).map(p => p.jobs));
+    // console.table(getNames(people, 1990))
 })
