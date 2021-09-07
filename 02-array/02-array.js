@@ -287,7 +287,6 @@ function getTheHighestOrLowestNumOfPeopleWorking(arr) {
 function findNumOfPeopleWorkingInSpecificYear(arr, year) {
     const jobsList = arr.map(person => person.jobs);
     const flattenedJobsList = jobsList.flat();
-    console.log(flattenedJobsList)
     
     return flattenedJobsList.filter(jobItem => 
         new Date(jobItem.startedAt).getFullYear() === year
@@ -295,20 +294,35 @@ function findNumOfPeopleWorkingInSpecificYear(arr, year) {
 }
 
 // 	16. Sortującą ludzi wg imienia, nazwiska, kraj zamieszkania, bądź nazwy firmy dla której ostatnio pracowali bądź dalej pracują.
-function sortPeopleByGivenProperty(arr, propertyName) {
-    return [...arr].sort((a, b) => {
-        let propertyA = a[propertyName];
-        let propertyB = b[propertyName];
+const isSorted = (itemA, itemB) => {
+    if (itemA > itemB) {
+        return 1;
+    } else if (itemA < itemB) {
+        return -1;
+    } else {
+        return 0
+    }
+}
 
-        if (propertyA > propertyB) {
-            return 1;
-        } else if (propertyA < propertyB) {
-            return -1;
-        } else {
-            return 0
-        }
-    });
-} // ***works for the firstname and surname
+function sortPeopleByGivenProperty(arr, propertyName) {
+    if (propertyName === 'firstname' || 'surname') {
+        return [...arr].sort((a, b) => {
+            let propertyA = a[propertyName];
+            let propertyB = b[propertyName];
+        
+            return isSorted(propertyA, propertyB);
+        });
+    }
+
+    if (propertyName === 'country') {
+        return [...arr].sort((a, b) => {
+            let propertyA = a.actualAddress.country;
+            let propertyB = b.actualAddress.country;
+
+            return isSorted(propertyA, propertyB);
+        })
+    }
+} // ***works for the firstname, surname and country
 
 // 	17. Czy ktoś mieszka na tej samej ulicy, a jeżeli tak, to kto?
 function getPeopleLivingOnTheSameStreet(arr, street, city, state, country) {
@@ -334,8 +348,7 @@ function findTheLongestSentence(arr) {
 
 // 	19. Jakie słowa mają liczbę znaków pomiędzy X a Y (description)?
 function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo) {
-    const wordsList = [];
-    arr.forEach(person => wordsList.push(person.description.replace(/[^a-zA-Z ]/g, "").toLocaleLowerCase().split(' ')));
+    const wordsList = arr.map(person => person.description.replace(/[^a-zA-Z ]/g, "").toLocaleLowerCase().split(' '));
     const flattenedWordsList = wordsList.flat();
 
     return flattenedWordsList.filter((word, index) => {
@@ -385,5 +398,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(getPeopleWithTheLongestDescription(people));
+    console.log(sortPeopleByGivenProperty(people, 'country'));
 })
