@@ -322,7 +322,23 @@ function sortPeopleByGivenProperty(arr, propertyName) {
             return isSorted(propertyA, propertyB);
         })
     }
-} // ***works for the firstname, surname and country
+
+    if (propertyName === 'company') {
+        return [...arr].sort((a, b) => {
+            let propertyA = a.jobs.map(job => {
+                if (Math.max(new Date(job.endedAt))) {
+                    return job.company;
+                }
+            })
+            let propertyB = b.jobs.map(job => {
+                if (Math.max(new Date(job.endedAt))) {
+                    return job.company;
+                }
+            })
+            return isSorted(propertyA, propertyB);
+        });
+    }
+}
 
 // 	17. Czy ktoś mieszka na tej samej ulicy, a jeżeli tak, to kto?
 function getPeopleLivingOnTheSameStreet(arr, street, city, state, country) {
@@ -398,5 +414,5 @@ requestURL.addEventListener('load', () => {
     const people = requestURL.response;
     // console.log(people);
     // people.map(person => console.log(person))
-    console.log(sortPeopleByGivenProperty(people, 'country'));
+    // console.log(sortPeopleByGivenProperty(people, 'company'));
 })
