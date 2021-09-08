@@ -228,10 +228,10 @@ function findTheMostRepeatedHouseNumbers(arr) {
     const houseNumsRepsCounter = {};
     repsCounterFn(houseNumbersList, houseNumsRepsCounter);
 
-    let maxCount = Math.max(...Object.values(houseNumsRepsCounter));
-
     let theMostRepeatedHouseNum = [];
-    Object.entries(houseNumsRepsCounter).filter(([houseNum, count]) => count === maxCount && theMostRepeatedHouseNum.push(houseNum));
+    Object.entries(houseNumsRepsCounter).filter(([houseNum, count]) => 
+        count === Math.max(...Object.values(houseNumsRepsCounter)) && theMostRepeatedHouseNum.push(houseNum)
+    );
 
     return theMostRepeatedHouseNum;
 }
@@ -287,8 +287,12 @@ function getTheHighestOrLowestNumOfPeopleWorking(arr) {
     let yearsWithMaxCountResult = [];
     let yearsWithMinCountResult = [];
 
-    Object.entries(yearsCounter).filter(([year, count]) => count === Math.max(...Object.values(yearsCounter)) && yearsWithMaxCountResult.push(year));
-    Object.entries(yearsCounter).filter(([year, count]) => count === Math.min(...Object.values(yearsCounter)) && yearsWithMinCountResult.push(year));
+    Object.entries(yearsCounter).filter(([year, count]) => 
+        count === Math.max(...Object.values(yearsCounter)) && yearsWithMaxCountResult.push(year)
+    );
+    Object.entries(yearsCounter).filter(([year, count]) => 
+        count === Math.min(...Object.values(yearsCounter)) && yearsWithMinCountResult.push(year)
+    );
 
     return {
         yearsWithMaxCountResult,
@@ -331,11 +335,11 @@ function sortPeopleByGivenProperty(arr, propertyName) {
             prev[propertyName] > next[propertyName] ? 1 : -1;
             break;
         case 'country':
-            comparator = ({actualAddress: preAddress}, {actualAddress: nextAddress}) => preAddress.country > nextAddress.country ? 1 : -1;
+            comparator = ({actualAddress: preAddress}, {actualAddress: nextAddress}) => 
+                preAddress.country > nextAddress.country ? 1 : -1;
             break;
         case 'company':
             comparator = (prev, next) => {
-
                 const prevCompany = getLastJob(prev).company;
                 const nextCompany = getLastJob(next).company
 
@@ -392,9 +396,13 @@ function getTheMostAndLeastPopulatedState(arr, infoType) {
 
     let resultList = [];
     if (infoType === 'the most populated states') {
-        Object.entries(statesRepsCounter).filter(([stateName, count]) => count === Math.max(...Object.values(statesRepsCounter)) && resultList.push(stateName));
+        Object.entries(statesRepsCounter).filter(([stateName, count]) => 
+            count === Math.max(...Object.values(statesRepsCounter)) && resultList.push(stateName)
+        );
     } else if (infoType === 'the least populated states') {
-        Object.entries(statesRepsCounter).filter(([stateName, count]) => count === Math.min(...Object.values(statesRepsCounter)) && resultList.push(stateName));
+        Object.entries(statesRepsCounter).filter(([stateName, count]) => 
+            count === Math.min(...Object.values(statesRepsCounter)) && resultList.push(stateName)
+        );
     } else {
         throw new Error('Sorry, this property does not exist');
     }
