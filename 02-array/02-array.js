@@ -7,21 +7,38 @@ requestURL.open('GET', url);
 requestURL.responseType = 'json';
 requestURL.send();
 
+// ************ Shared functions *****************//
+function getTheMaximumValue(itemsArr) {
+    return itemsArr.map(item => item.length).reduce((a, b) => Math.max(a, b));
+}
+
+const removeDuplicates = (itemsArr) => {
+    return itemsArr.filter((value, index) => itemsArr.indexOf(value) === index);
+}
+
+const repsCounterFn = (arr, objectCounter) => {
+    arr.map(item => 
+        objectCounter[item]
+            ? objectCounter[item]++
+            : objectCounter[item] = 1
+    )
+}
+
+// ***********************************
+
 // Napisz metody, które:
 
 // 	1. Zwracającą listę unikalnych nazw krajów w których żyli ludzie.
 function findUniqueCountriesWherePeopleLivedBefore(arr) {
     const countriesList = [];
-    arr.map(person => person.addresses.map(details => countriesList.push(details.country)))
-
-    return countriesList.filter((value, index) => countriesList.indexOf(value) === index)
+    arr.map(person => person.addresses.map(details => countriesList.push(details.country)));
+    return removeDuplicates(countriesList);
 }
 
 // 	2. Zwracającą listę unikalnych nazw krajów w których ludzie żyją aktualnie.
 function findUniqueCountriesWherePeopleCurrentlyLive(arr) {
     const countriesList = arr.map(person => person.actualAddress.country);
-
-    return countriesList.filter((value, index) => countriesList.indexOf(value) == index);
+    return removeDuplicates(countriesList);
 }
 
 // 	3. Zwracającą liczbę aktualnie mieszkających ludzi w danym kraju.
@@ -32,17 +49,15 @@ function getNumOfPeopleLivingInParticularCountry(arr, countryName) {
 
 // 	4. Zwracającą listę krajów, w których żyje więcej lub mniej ludzi niż X
 function getSpecificCountriesList(arr, compareNum, comparisonType) {
+    // 1. Przemapować listę i wyciągnąć z nich wszystkie kraje
+    // 2. Policzyć ile razy dany kraj się powtarzał
+    // 3. Sprawdzić, który kraj potwarzał się najczęściej, a który najmniej
     const countriesList = arr.map(person => person.actualAddress.country);
 
     const countriesRepsCounter = {};
-    countriesList.map(country => 
-        countriesRepsCounter[country]
-            ? countriesRepsCounter[country]++
-            : countriesRepsCounter[country] = 1
-    )
+    repsCounterFn(countriesList, countriesRepsCounter);
 
     let resultList = [];
-
     if (comparisonType === 'moreThan') {
         Object.entries(countriesRepsCounter).filter(([countryName, count]) => count > compareNum && resultList.push(countryName));
     } else if (comparisonType === 'lessThan') {
@@ -95,6 +110,12 @@ function getNames(arr, givenYear) {
 // 	6. Zwracającą firmę, która płaci w sumie najwięcej lub najmniej swoim pracownikom.
 // **** companies names: Advance, Beason, Conway, Kohatk, Leming, Roeville, Roeville, Steinhatchee, Witmer;
 function getCompany(arr, searchedInfo) {
+    // 1. Przemapować pracowników i wyciągnąć listę wszystkich prac
+    // 2. Pogrupować listę prac według pracodawcy (klucz) zawierającą tablicę z wartościami płac
+    // 3. Przemapować tą pogrupowaną listę i wydobyć sumę płac dla każdej firmy
+    // 4. Wrzucić firmę i zarobki do oddzielnej tablicy
+    // 5. Zamienić zablicę za obiekt z kluczami (nazwa firmy) i wartościami (suma płac)
+    // 6. Wyciągnąć pożądaną wartość z utworzonego obiektu
     let totalSalary = 0;
 
     const jobsList = arr.map(person => person.jobs);
@@ -148,7 +169,6 @@ function getAverageEarnings(arr, companyName) {
 // 	8. Zwracającą osoby, które najwięcej o sobie opisały w polu description.
 function getPeopleWithTheLongestDescription(arr) {
     const descriptionsList = arr.map(person => person.description);
-
     return arr.filter(person => person.description.length === getTheMaximumValue(descriptionsList));
 }
 
@@ -168,7 +188,7 @@ function findTheMostOrLeastRepeatedWords(arr) {
     const flattenedWordsList = wordsList.flat();
 
     const wordsCounter = {};
-    flattenedWordsList.forEach(word => wordsCounter[word] ? wordsCounter[word]++ : wordsCounter[word] = 1);
+    repsCounterFn(flattenedWordsList, wordsCounter);
 
     let maxCount = Math.max(...Object.values(wordsCounter));
     let minCount = Math.min(...Object.values(wordsCounter));
@@ -199,6 +219,9 @@ function groupByCurrentAddress(arr) {
 
 // 	12. Jakie numery domów najczęściej się powtarzały.
 function findTheMostRepeatedHouseNumbers(arr) {
+    // 1. Przemapuj tablicę z osobami i wyodrębnij numery domów
+    // 2. Policz ile razy dany numer się powtarzał
+    // 3. Zajdź maksymalną ilość powtórzeń danego numeru
     const houseNumbersList = [];
 
     arr.forEach(person => {
@@ -207,10 +230,7 @@ function findTheMostRepeatedHouseNumbers(arr) {
     });
 
     const houseNumsRepsCounter = {};
-    houseNumbersList.map(houseNumber => 
-        houseNumsRepsCounter[houseNumber] 
-            ? houseNumsRepsCounter[houseNumber]++ 
-            : houseNumsRepsCounter[houseNumber] = 1);
+    repsCounterFn(houseNumbersList, houseNumsRepsCounter);
 
     let maxCount = Math.max(...Object.values(houseNumsRepsCounter));
 
@@ -237,7 +257,6 @@ function getPeopleWithContinuosWork(arr) {
     // 1. Sortowanie prac pracownika
     // 2. Sprawdzenie czy pracownik mial wiecej niz jedna prace
         // Jezeli tak, to sprawdzamy czy jest ciaglosc, jezeli nie to jest ciagla praca
-
     const jobSortFn = (prev, next) => new Date(prev.endedAt) > new Date(next.startedAt) ? 1 : -1;
 
     return arr.map(p => {
@@ -249,6 +268,10 @@ function getPeopleWithContinuosWork(arr) {
 
 // 	14. W którym roku pracowało najwięcej ludzi a w którym najmniej.
 function getTheHighestOrLowestNumOfPeopleWorking(arr) {
+    // 1. Wyodrębnić wszystkie prace z tablicy osób
+    // 2. Znaleźć brakujące daty między rozpocząciem a zakończeniem danej pracy
+    // 3. Policzyć ile razy każdy rok pracujący się powtarzał
+    // 4. Wyciągnąć największą / najmniejszą wartość z tych powtórzeń
     const jobsList = arr.map(person => person.jobs);
     const flattenedJobsList = jobsList.flat();
 
@@ -261,11 +284,9 @@ function getTheHighestOrLowestNumOfPeopleWorking(arr) {
             yearsBetweenArr.push(i);
         }
     });
-    
+
     const yearsCounter = {};
-    yearsBetweenArr.map(year =>
-        yearsCounter[year] ? yearsCounter[year]++ : yearsCounter[year] = 1
-    )
+    repsCounterFn(yearsBetweenArr, yearsCounter);
 
     let maxCount = Math.max(...Object.values(yearsCounter));
     let minCount = Math.min(...Object.values(yearsCounter));
@@ -374,11 +395,7 @@ function getTheMostAndLeastPopulatedState(arr, infoType) {
     const statesList = arr.map(person => person.actualAddress.state)
     
     const statesRepsCounter = {};
-    statesList.map(state => {
-        statesRepsCounter[state] 
-            ? statesRepsCounter[state]++
-            : statesRepsCounter[state] = 1
-    })
+    repsCounterFn(statesList, statesRepsCounter);
 
     const maxCount = Math.max(...Object.values(statesRepsCounter));
     const minCount = Math.min(...Object.values(statesRepsCounter));
@@ -395,13 +412,6 @@ function getTheMostAndLeastPopulatedState(arr, infoType) {
 
     return resultList;
 }
-
-// ************ Shared functions *****************//
-function getTheMaximumValue(itemsArr) {
-    return itemsArr.map(item => item.length).reduce((a, b) => Math.max(a, b));
-}
-
-
 
 
 ////
