@@ -8,11 +8,11 @@ requestURL.responseType = 'json';
 requestURL.send();
 
 // ************ Shared functions *****************//
-function getTheMaximumValue(itemsArr) {
+function getTheMaxValueFn(itemsArr) {
     return itemsArr.map(item => item.length).reduce((a, b) => Math.max(a, b));
 }
 
-const removeDuplicates = (itemsArr) => {
+const removeDuplicatesFn = (itemsArr) => {
     return itemsArr.filter((value, index) => itemsArr.indexOf(value) === index);
 }
 
@@ -24,6 +24,10 @@ const repsCounterFn = (arr, objectCounter) => {
     )
 }
 
+const getWordsListFn = (itemsArr) => {
+    return itemsArr.map(item => item.description.replace(/[^a-zA-Z ]/g, "").toLocaleLowerCase().split(' '));
+}
+
 // ***********************************
 
 // Napisz metody, które:
@@ -32,13 +36,13 @@ const repsCounterFn = (arr, objectCounter) => {
 function findUniqueCountriesWherePeopleLivedBefore(arr) {
     const countriesList = [];
     arr.map(person => person.addresses.map(details => countriesList.push(details.country)));
-    return removeDuplicates(countriesList);
+    return removeDuplicatesFn(countriesList);
 }
 
 // 	2. Zwracającą listę unikalnych nazw krajów w których ludzie żyją aktualnie.
 function findUniqueCountriesWherePeopleCurrentlyLive(arr) {
     const countriesList = arr.map(person => person.actualAddress.country);
-    return removeDuplicates(countriesList);
+    return removeDuplicatesFn(countriesList);
 }
 
 // 	3. Zwracającą liczbę aktualnie mieszkających ludzi w danym kraju.
@@ -140,14 +144,12 @@ function getCompany(arr, searchedInfo) {
     const transformedJobSalaryPairs = Object.fromEntries(jobSalaryPairs);
     
     const salariesSums = Object.values(transformedJobSalaryPairs);
-    const maxSum = Math.max(...salariesSums);
-    const minSum = Math.min(...salariesSums);
 
     let searchedCompany = [];
     if (searchedInfo === "the highest paying companies") {
-        Object.entries(transformedJobSalaryPairs).filter(([company, sum]) => sum === maxSum && searchedCompany.push(company))
+        Object.entries(transformedJobSalaryPairs).filter(([company, sum]) => sum === Math.max(...salariesSums) && searchedCompany.push(company))
     } else if (searchedInfo = "the lowest paying company") {
-        Object.entries(transformedJobSalaryPairs).filter(([company, sum]) => sum === minSum && searchedCompany.push(company))
+        Object.entries(transformedJobSalaryPairs).filter(([company, sum]) => sum === Math.min(...salariesSums) && searchedCompany.push(company))
     } else {
         throw new Error('Sorry, this property does not exisit')
     }
@@ -169,33 +171,27 @@ function getAverageEarnings(arr, companyName) {
 // 	8. Zwracającą osoby, które najwięcej o sobie opisały w polu description.
 function getPeopleWithTheLongestDescription(arr) {
     const descriptionsList = arr.map(person => person.description);
-    return arr.filter(person => person.description.length === getTheMaximumValue(descriptionsList));
+    return arr.filter(person => person.description.length === getTheMaxValueFn(descriptionsList));
 }
 
 // 	9. Policz różne (unikalne) słowa wykorzystane w polu description.
 function countUniqueWords(arr) {
-    const wordsList = [];
-    arr.forEach(person => wordsList.push(person.description.replace(/[^a-zA-Z ]/g, "").toLocaleLowerCase().split(' ')));
+    const wordsList = getWordsListFn(arr);
     const flattenedWordsList = wordsList.flat();
-    
-    return flattenedWordsList.filter((value, index) => flattenedWordsList.indexOf(value) === index).length;
+
+    return removeDuplicatesFn(flattenedWordsList).length;
 }
 
 // 	10. Które słowa powtarzały się najczęściej, a które najrzadziej.
 function findTheMostOrLeastRepeatedWords(arr) {
-    const wordsList = [];
-    arr.forEach(person => wordsList.push(person.description.replace(/[^a-zA-Z ]/g, "").toLocaleLowerCase().split(' ')));
+    const wordsList = getWordsListFn(arr);
     const flattenedWordsList = wordsList.flat();
 
     const wordsCounter = {};
     repsCounterFn(flattenedWordsList, wordsCounter);
 
-    let maxCount = Math.max(...Object.values(wordsCounter));
-    let minCount = Math.min(...Object.values(wordsCounter));
-
-    let theMostRepeatedWords = Object.entries(wordsCounter).filter(([word, count]) => count === maxCount);
-
-    let theLeastRepeatedWords = Object.entries(wordsCounter).filter(([word, count]) => count === minCount);
+    let theMostRepeatedWords = Object.entries(wordsCounter).filter(([word, count]) => count === Math.max(...Object.values(wordsCounter)));
+    let theLeastRepeatedWords = Object.entries(wordsCounter).filter(([word, count]) => count === Math.min(...Object.values(wordsCounter)));
 
     return {
         theMostRepeatedWords,
@@ -288,14 +284,11 @@ function getTheHighestOrLowestNumOfPeopleWorking(arr) {
     const yearsCounter = {};
     repsCounterFn(yearsBetweenArr, yearsCounter);
 
-    let maxCount = Math.max(...Object.values(yearsCounter));
-    let minCount = Math.min(...Object.values(yearsCounter));
-
     let yearsWithMaxCountResult = [];
     let yearsWithMinCountResult = [];
 
-    Object.entries(yearsCounter).filter(([year, count]) => count === maxCount && yearsWithMaxCountResult.push(year));
-    Object.entries(yearsCounter).filter(([year, count]) => count === minCount && yearsWithMinCountResult.push(year));
+    Object.entries(yearsCounter).filter(([year, count]) => count === Math.max(...Object.values(yearsCounter)) && yearsWithMaxCountResult.push(year));
+    Object.entries(yearsCounter).filter(([year, count]) => count === Math.min(...Object.values(yearsCounter)) && yearsWithMinCountResult.push(year));
 
     return {
         yearsWithMaxCountResult,
@@ -375,12 +368,12 @@ function findTheLongestSentence(arr) {
     arr.forEach(person => sentencesList.push(person.description.split('. ')));
     const flattenedSentencesList = sentencesList.flat();
     
-    return flattenedSentencesList.filter(sentence => sentence.length === getTheMaximumValue(flattenedSentencesList));
+    return flattenedSentencesList.filter(sentence => sentence.length === getTheMaxValueFn(flattenedSentencesList));
 }
 
 // 	19. Jakie słowa mają liczbę znaków pomiędzy X a Y (description)?
 function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo) {
-    const wordsList = arr.map(person => person.description.replace(/[^a-zA-Z ]/g, "").toLocaleLowerCase().split(' '));
+    const wordsList = getWordsListFn(arr);
     const flattenedWordsList = wordsList.flat();
 
     return flattenedWordsList.filter((word, index) => {
@@ -397,15 +390,11 @@ function getTheMostAndLeastPopulatedState(arr, infoType) {
     const statesRepsCounter = {};
     repsCounterFn(statesList, statesRepsCounter);
 
-    const maxCount = Math.max(...Object.values(statesRepsCounter));
-    const minCount = Math.min(...Object.values(statesRepsCounter));
-
     let resultList = [];
-
     if (infoType === 'the most populated states') {
-        Object.entries(statesRepsCounter).filter(([stateName, count]) => count === maxCount && resultList.push(stateName));
+        Object.entries(statesRepsCounter).filter(([stateName, count]) => count === Math.max(...Object.values(statesRepsCounter)) && resultList.push(stateName));
     } else if (infoType === 'the least populated states') {
-        Object.entries(statesRepsCounter).filter(([stateName, count]) => count === minCount && resultList.push(stateName));
+        Object.entries(statesRepsCounter).filter(([stateName, count]) => count === Math.min(...Object.values(statesRepsCounter)) && resultList.push(stateName));
     } else {
         throw new Error('Sorry, this property does not exist');
     }
