@@ -1,17 +1,10 @@
 "use strict";
 
-const url = './animals.json';
-const secondUrl = './meta-animals.json';
+const data = require('../03-object_oriented/animals.json');
+const metaData = require('../03-object_oriented/meta-animals.json');
+console.log(data);
+console.log(metaData)
 
-let requestURL = new XMLHttpRequest();
-requestURL.open('GET', url);
-requestURL.responseType = 'json';
-requestURL.send();
-
-// let requestURL = new XMLHttpRequest();
-// requestURL.open('GET', secondUrl);
-// requestURL.responseType = 'json';
-// requestURL.send();
 
 // Masz do dyspozycji dane w pliku "animals.json" i "meta-animals.json"
 
@@ -174,17 +167,3 @@ function averagCowsAge(arr, cowType) {
 // 	4. Jaka jest łączna waga macior
 
 // 	5. Ile świń nie osiągneło dojrzałości płciowej
-
-
-
-requestURL.onload = () => {
-    const animals = requestURL.response;
-    // console.log(animals);
-    console.log(averagCowsAge(animals, 'mleczna'));
-    
-}
-
-// requestURL.onload = () => {
-//     const metaAnimals = requestURL.response;
-//     console.log(metaAnimals);
-// }

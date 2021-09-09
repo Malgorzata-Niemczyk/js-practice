@@ -13,15 +13,19 @@ function getTheMaxValueFn(itemsArr) {
 }
 
 const removeDuplicatesFn = (itemsArr) => {
+    // return Array.from(new Set(itemsArr));
     return itemsArr.filter((value, index) => itemsArr.indexOf(value) === index);
 }
 
-const repsCounterFn = (arr, objectCounter) => {
-    arr.map(item => 
-        objectCounter[item]
-            ? objectCounter[item]++
-            : objectCounter[item] = 1
+const repsCounterFn = arr => {
+    const counter = {};
+    arr.forEach(item => 
+        counter[item]
+            ? counter[item]++
+            : counter[item] = 1
     )
+
+    return counter;
 }
 
 const getWordsListFn = (itemsArr) => {
@@ -34,8 +38,10 @@ const getWordsListFn = (itemsArr) => {
 
 // 	1. Zwracającą listę unikalnych nazw krajów w których żyli ludzie.
 function findUniqueCountriesWherePeopleLivedBefore(arr) {
-    const countriesList = [];
-    arr.map(person => person.addresses.map(details => countriesList.push(details.country)));
+    const countriesList = arr
+        .map(person => person.addresses)
+        .flat()
+        .map(address => address.country);
     return removeDuplicatesFn(countriesList);
 }
 
@@ -47,7 +53,7 @@ function findUniqueCountriesWherePeopleCurrentlyLive(arr) {
 
 // 	3. Zwracającą liczbę aktualnie mieszkających ludzi w danym kraju.
 function getNumOfPeopleLivingInParticularCountry(arr, countryName) {
-    return arr.map(person => person.actualAddress).filter(addressDetails => addressDetails.country === countryName).length
+    return arr.filter(({actualAddress: {country}}) => country === countryName).length
 }
 
 
@@ -58,19 +64,19 @@ function getSpecificCountriesList(arr, compareNum, comparisonType) {
     // 3. Sprawdzić, który kraj potwarzał się najczęściej, a który najmniej
     const countriesList = arr.map(person => person.actualAddress.country);
 
-    const countriesRepsCounter = {};
-    repsCounterFn(countriesList, countriesRepsCounter);
+    const countriesRepsCounter = repsCounterFn(countriesList);
 
-    let resultList = [];
+    const getCountryNames = comparatorFn => Object.entries(countriesRepsCounter)
+    .filter(comparatorFn)
+    .map(([country, ...rest]) => country);
+
     if (comparisonType === 'moreThan') {
-        Object.entries(countriesRepsCounter).filter(([countryName, count]) => count > compareNum && resultList.push(countryName));
+        return getCountryNames(([countryName, count]) => count > compareNum);
     } else if (comparisonType === 'lessThan') {
-        Object.entries(countriesRepsCounter).filter(([countryName, count]) => count < compareNum && resultList.push(countryName));
+        return getCountryNames(([countryName, count]) => count < compareNum);
     } else {
         throw new Error('Sorry, this property does not exist')
     }
-
-    return resultList;
 }
 
 
@@ -115,71 +121,55 @@ function getNames(arr, givenYear) {
 // **** companies names: Advance, Beason, Conway, Kohatk, Leming, Roeville, Roeville, Steinhatchee, Witmer;
 function getCompany(arr, searchedInfo) {
     // 1. Przemapować pracowników i wyciągnąć listę wszystkich prac
-    // 2. Pogrupować listę prac według pracodawcy (klucz) zawierającą tablicę z wartościami płac
-    // 3. Przemapować tą pogrupowaną listę i wydobyć sumę płac dla każdej firmy
-    // 4. Wrzucić firmę i zarobki do oddzielnej tablicy
-    // 5. Zamienić zablicę za obiekt z kluczami (nazwa firmy) i wartościami (suma płac)
-    // 6. Wyciągnąć pożądaną wartość z utworzonego obiektu
-    let totalSalary = 0;
+    // 2. Pogrupować listę prac według pracodawcy (klucz) zawierającą sumę płac
+    // 3. Wyciągnąć pożądaną wartość z utworzonego obiektu
 
-    const jobsList = arr.map(person => person.jobs);
-    const flattenedJobsList = jobsList.flat();
+    const groupedJobs = arr
+        .map(person => person.jobs)
+        .flat()
+        .reduce((acc, object) => {
+            let key = object.company;
+            if (!acc[key]) {
+                acc[key] = object.salary.value;
+            } else {
+                acc[key] += object.salary.value;
+            }
+            return acc;
+        }, {});
 
-    const groupedJobs = flattenedJobsList.reduce((acc, object) => {
-        let key = object.company;
-        if (!acc[key]) {
-            acc[key] = []
-        }
-
-        acc[key].push(object.salary.value);
-        return acc;
-    }, {});
-
-    const jobSalaryPairs = [];
-    Object.entries(groupedJobs).forEach(([companyName, salariesArr]) => {
-        salariesArr.forEach(salary => totalSalary += salary);
-        jobSalaryPairs.push([companyName, totalSalary]);
-    })
-
-    const transformedJobSalaryPairs = Object.fromEntries(jobSalaryPairs);
-    
-    const salariesSums = Object.values(transformedJobSalaryPairs);
-
-    let searchedCompany = [];
     if (searchedInfo === "the highest paying companies") {
-        Object.entries(transformedJobSalaryPairs).filter(([company, sum]) => sum === Math.max(...salariesSums) && searchedCompany.push(company))
+        return Object.entries(groupedJobs)
+            .reduce((acc, curr) => acc[1] < curr[1] ? curr : acc, ['', 0])[0];
     } else if (searchedInfo = "the lowest paying company") {
-        Object.entries(transformedJobSalaryPairs).filter(([company, sum]) => sum === Math.min(...salariesSums) && searchedCompany.push(company))
+        return Object.entries(groupedJobs)
+            .reduce((acc, curr) => acc[1] > curr[1] ? curr : acc, ['', 0])[0];
     } else {
         throw new Error('Sorry, this property does not exist')
     }
 
-    return searchedCompany;
 } 
 
 // 	7. Zwracającą średnie wynagrodzenie pracownika w danej firmie.
 function getAverageEarnings(arr, companyName) {
-    const jobsList = arr.map(person => person.jobs);
-    const flattenedJobsList = jobsList.flat();
-
-    const salaryList = [];
-    flattenedJobsList.filter(job => job.company === companyName && salaryList.push(job.salary.value));
-
-    return (salaryList.reduce((a, b) => (a + b)) / salaryList.length).toFixed(2);
+    const {counter, salarySum} = arr.map(person => person.jobs)
+    .flat()
+    .filter(job => job.company === companyName)
+    .map(job => job.salary.value)
+    .reduce((acc, curr) => ({counter: acc.counter++, salarySum: acc.salarySum + curr}), {counter: 0, salarySum: 0})
+    
+    return salarySum / counter.toFixed(2);
 }
 
 // 	8. Zwracającą osoby, które najwięcej o sobie opisały w polu description.
 function getPeopleWithTheLongestDescription(arr) {
-    const descriptionsList = arr.map(person => person.description);
+    const descriptionsList = arr.map(person => person.description)
     return arr.filter(person => person.description.length === getTheMaxValueFn(descriptionsList));
 }
 
 // 	9. Policz różne (unikalne) słowa wykorzystane w polu description.
 function countUniqueWords(arr) {
-    const wordsList = getWordsListFn(arr);
-    const flattenedWordsList = wordsList.flat();
-
-    return removeDuplicatesFn(flattenedWordsList).length;
+    const wordsList = getWordsListFn(arr).flat();
+    return removeDuplicatesFn(wordsList).length;
 }
 
 // 	10. Które słowa powtarzały się najczęściej, a które najrzadziej.
@@ -187,8 +177,7 @@ function findTheMostOrLeastRepeatedWords(arr) {
     const wordsList = getWordsListFn(arr);
     const flattenedWordsList = wordsList.flat();
 
-    const wordsCounter = {};
-    repsCounterFn(flattenedWordsList, wordsCounter);
+    const wordsCounter = repsCounterFn(flattenedWordsList);
 
     let theMostRepeatedWords = Object.entries(wordsCounter).filter(([word, count]) => count === Math.max(...Object.values(wordsCounter)));
     let theLeastRepeatedWords = Object.entries(wordsCounter).filter(([word, count]) => count === Math.min(...Object.values(wordsCounter)));
@@ -225,8 +214,7 @@ function findTheMostRepeatedHouseNumbers(arr) {
         houseNumbersList.push(person.actualAddress.number);
     });
 
-    const houseNumsRepsCounter = {};
-    repsCounterFn(houseNumbersList, houseNumsRepsCounter);
+    const houseNumsRepsCounter = repsCounterFn(houseNumbersList);
 
     let theMostRepeatedHouseNum = [];
     Object.entries(houseNumsRepsCounter).filter(([houseNum, count]) => 
@@ -281,8 +269,7 @@ function getTheHighestOrLowestNumOfPeopleWorking(arr) {
         }
     });
 
-    const yearsCounter = {};
-    repsCounterFn(yearsBetweenArr, yearsCounter);
+    const yearsCounter = repsCounterFn(yearsBetweenArr);
 
     let yearsWithMaxCountResult = [];
     let yearsWithMinCountResult = [];
@@ -302,10 +289,9 @@ function getTheHighestOrLowestNumOfPeopleWorking(arr) {
 
 // 	15. Informującą ile osób pracowało w danym roku.
 function findNumOfPeopleWorkingInSpecificYear(arr, givenYear) {
-    const jobsList = arr.map(person => person.jobs);
-    const flattenedJobsList = jobsList.flat();
-
-    return flattenedJobsList.filter(jobItem => workedInJobInGivenYear(jobItem, givenYear)).length;
+    return arr.map(person => person.jobs)
+        .flat()
+        .filter(jobItem => workedInJobInGivenYear(jobItem, givenYear)).length;
 }
 
 // 	16. Sortującą ludzi wg imienia, nazwiska, kraj zamieszkania, bądź nazwy firmy dla której ostatnio pracowali bądź dalej pracują.
@@ -355,8 +341,10 @@ function sortPeopleByGivenProperty(arr, propertyName) {
 function getPeopleLivingOnTheSameStreet(arr, street, city, state, country) {
     const peoplesNames = [];
 
+    const isTheSameAddress = person.actualAddress.street === street && person.actualAddress.city === city && person.actualAddress.state === state && person.actualAddress.country === country
+
     arr.forEach(person => {
-        if (person.actualAddress.street === street && person.actualAddress.city === city && person.actualAddress.state === state && person.actualAddress.country === country) {
+        if (isTheSameAddress) {
             peoplesNames.push(`${person.surname} ${person.firstname}`);
         } else {
             throw new Error('Sorry, no results found')
@@ -381,9 +369,7 @@ function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo)
     const flattenedWordsList = wordsList.flat();
 
     return flattenedWordsList.filter((word, index) => {
-        if (word.length >= charactersNumFrom && word.length <= charactersNumTo && flattenedWordsList.indexOf(word) === index) {
-            return word;
-        }
+        return word.length >= charactersNumFrom && word.length <= charactersNumTo && flattenedWordsList.indexOf(word) === index;
     })
 }
 
@@ -391,23 +377,23 @@ function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo)
 function getTheMostAndLeastPopulatedState(arr, infoType) {
     const statesList = arr.map(person => person.actualAddress.state)
     
-    const statesRepsCounter = {};
-    repsCounterFn(statesList, statesRepsCounter);
+    const statesRepsCounter = repsCounterFn(statesList);
 
-    let resultList = [];
+    const getResultsList = comparatorFn => Object.entries(statesRepsCounter)
+        .filter(comparatorFn)
+        .map(([state, ...rest]) => state)
+
     if (infoType === 'the most populated states') {
-        Object.entries(statesRepsCounter).filter(([stateName, count]) => 
-            count === Math.max(...Object.values(statesRepsCounter)) && resultList.push(stateName)
+        return getResultsList(([state, count]) => 
+            count === Math.max(...Object.values(statesRepsCounter))
         );
     } else if (infoType === 'the least populated states') {
-        Object.entries(statesRepsCounter).filter(([stateName, count]) => 
-            count === Math.min(...Object.values(statesRepsCounter)) && resultList.push(stateName)
-        );
+        return getResultsList(([state, count]) => 
+            count === Math.min(...Object.values(statesRepsCounter))
+        )
     } else {
         throw new Error('Sorry, this property does not exist');
     }
-
-    return resultList;
 }
 
 
@@ -420,5 +406,7 @@ requestURL.addEventListener('load', () => {
     // console.table(sortPeopleByGivenProperty(people, 'company').map(p => getLastJob(p)))
     // console.log(getPeopleWithContinuosWork(people).map(p => p.jobs));
     // console.table(getNames(people, 1990))
-    console.log(findNumOfPeopleWorkingInSpecificYear(people, 2022))
+    // console.log(findNumOfPeopleWorkingInSpecificYear(people, 2022))
+    // console.log(getSpecificCountriesList(people, 400, 'lessThan'))
+    // console.log(getCompany(people, "the highest paying companies"))
 })

@@ -1,0 +1,23 @@
+{
+  "name": "js-practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Malgorzata-Niemczyk/js-practice.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Malgorzata-Niemczyk/js-practice/issues"
+  },
+  "homepage": "https://github.com/Malgorzata-Niemczyk/js-practice#readme",
+  "dependencies": {
+    "tsc": "^2.0.3"
+  }
+}
