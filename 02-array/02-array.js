@@ -151,7 +151,7 @@ function getCompany(arr, searchedInfo) {
     } else if (searchedInfo = "the lowest paying company") {
         Object.entries(transformedJobSalaryPairs).filter(([company, sum]) => sum === Math.min(...salariesSums) && searchedCompany.push(company))
     } else {
-        throw new Error('Sorry, this property does not exisit')
+        throw new Error('Sorry, this property does not exist')
     }
 
     return searchedCompany;
@@ -301,13 +301,11 @@ function getTheHighestOrLowestNumOfPeopleWorking(arr) {
 }
 
 // 	15. Informującą ile osób pracowało w danym roku.
-function findNumOfPeopleWorkingInSpecificYear(arr, year) {
+function findNumOfPeopleWorkingInSpecificYear(arr, givenYear) {
     const jobsList = arr.map(person => person.jobs);
     const flattenedJobsList = jobsList.flat();
-    
-    return flattenedJobsList.filter(jobItem => 
-        new Date(jobItem.startedAt).getFullYear() === year
-    ).length
+
+    return flattenedJobsList.filter(jobItem => workedInJobInGivenYear(jobItem, givenYear)).length;
 }
 
 // 	16. Sortującą ludzi wg imienia, nazwiska, kraj zamieszkania, bądź nazwy firmy dla której ostatnio pracowali bądź dalej pracują.
@@ -422,4 +420,5 @@ requestURL.addEventListener('load', () => {
     // console.table(sortPeopleByGivenProperty(people, 'company').map(p => getLastJob(p)))
     // console.log(getPeopleWithContinuosWork(people).map(p => p.jobs));
     // console.table(getNames(people, 1990))
+    console.log(findNumOfPeopleWorkingInSpecificYear(people, 2022))
 })
