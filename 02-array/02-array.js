@@ -360,6 +360,8 @@ function getPeopleLivingOnTheSameStreet(arr, street, city, state, country) {
     arr.forEach(person => {
         if (person.actualAddress.street === street && person.actualAddress.city === city && person.actualAddress.state === state && person.actualAddress.country === country) {
             peoplesNames.push(`${person.surname} ${person.firstname}`);
+        } else {
+            throw new Error('Sorry, no results found')
         }
     })
 
