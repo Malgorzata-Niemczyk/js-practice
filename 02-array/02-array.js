@@ -356,21 +356,19 @@ function getPeopleLivingOnTheSameStreet(arr, street, city, state, country) {
 
 // 	18. Jakie zdanie/zdania były najdłuższe (description)?
 function findTheLongestSentence(arr) {
-    const sentencesList = [];
-    arr.forEach(person => sentencesList.push(person.description.split('. ')));
-    const flattenedSentencesList = sentencesList.flat();
-    
-    return flattenedSentencesList.filter(sentence => sentence.length === getTheMaxValueFn(flattenedSentencesList));
+    const sentencesList = arr.map(person => person.description.split('. ')).flat();
+    return sentencesList.filter(sentence => sentence.length === getTheMaxValueFn(sentencesList));
 }
 
 // 	19. Jakie słowa mają liczbę znaków pomiędzy X a Y (description)?
 function findWordsWithinCharactersRange(arr, charactersNumFrom, charactersNumTo) {
-    const wordsList = getWordsListFn(arr);
-    const flattenedWordsList = wordsList.flat();
+    const wordsList = getWordsListFn(arr).flat();
 
-    return flattenedWordsList.filter((word, index) => {
-        return word.length >= charactersNumFrom && word.length <= charactersNumTo && flattenedWordsList.indexOf(word) === index;
-    })
+    const isInRange = (item, index) => {
+       return item.length >= charactersNumFrom && item.length <= charactersNumTo && wordsList.indexOf(item) === index;
+    }
+    
+    return wordsList.filter(isInRange);
 }
 
 // 	20. Które stany są najbardziej zaludnione, a które najmniej?
