@@ -13,8 +13,9 @@ const metaData = require('./meta-animals.json');
 // Z danych zawartch w "animals.json" i "meta-animals.json":
 
 class Animals {
-    constructor(animalsList) {
+    constructor(animalsList, metaData) {
         this.animals = animalsList;
+        this.animalsMetaData = metaData;
     }
 
     removeDuplicatesFn(itemsArr) {
@@ -22,7 +23,7 @@ class Animals {
     }
 }
 
-const animalsArr = new Animals(data);
+const animalsArr = new Animals(data, metaData);
 // console.log(animalsArr);
 
 
