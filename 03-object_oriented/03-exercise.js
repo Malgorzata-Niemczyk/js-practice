@@ -16,10 +16,15 @@ class Animals {
     constructor(animalsList) {
         this.animals = animalsList;
     }
+
+    removeDuplicatesFn(itemsArr) {
+        return Array.from(new Set(itemsArr));
+    }
 }
 
 const animalsArr = new Animals(data);
 // console.log(animalsArr);
+
 
 // 	1. Wyświetl wszystkie rodzaje zwierząt 
 class AnimalTypes extends Animals {
@@ -29,23 +34,34 @@ class AnimalTypes extends Animals {
 
     getTypes() {
         const typesList = this.animals.map(animal => animal.type);
-        return typesList.filter((typeItem, index) => typesList.indexOf(typeItem) === index);
+        return this.removeDuplicatesFn(typesList)
     }
 }
 
 const animalTypes = new AnimalTypes(data);
-console.log(animalTypes.getTypes());
+// console.log(animalTypes.getTypes());
 
 
 // 	2. Wyświetl wszystkie występujące rasy zwierząt z danego rodzaju (użytkownik ma mieć możliwość podania rodzaju)
-// function getSpecificAnimalsRace(arr, kindName) {
-//     const racesList = [];
-//     arr.filter(animal => animal.kind === kindName && racesList.push(animal.race))
+class SpecificAnimalsRace extends Animals {
+    constructor(animalsList) {
+        super(animalsList);
+    }
 
-//     return racesList.filter((raceType, index) => racesList.indexOf(raceType) === index);
-// }
+    getSpecificRace(kindName) {
+        const racesList = [];
+        this.animals.forEach(animal => animal.kind === kindName && racesList.push(animal.race))
+    
+        return this.removeDuplicatesFn(racesList);
+    }
+}
+
+const animalsRace = new SpecificAnimalsRace(data);
+// console.log(animalsRace.getSpecificRace('świnia'))
+
 
 // 	3. Wylicz średnią wagę zwierząt danej rasy
+
 // function getAverageWeight(arr, raceName) {
 //     const total = 0;
 //     const filteredAnimalsArr = arr.filter(animal => animal.race === raceName && (total += animal.weight));
