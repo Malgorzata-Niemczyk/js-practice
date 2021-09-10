@@ -1,9 +1,9 @@
 "use strict";
 
-const data = require('../03-object_oriented/animals.json');
-const metaData = require('../03-object_oriented/meta-animals.json');
-console.log(data);
-console.log(metaData)
+const data = require('./animals.json');
+const metaData = require('./meta-animals.json');
+// console.log(data);
+// console.log(metaData)
 
 
 // Masz do dyspozycji dane w pliku "animals.json" i "meta-animals.json"
@@ -12,30 +12,46 @@ console.log(metaData)
 
 // Z danych zawartch w "animals.json" i "meta-animals.json":
 
+class Animals {
+    constructor(animalsList) {
+        this.animals = animalsList;
+    }
+}
+
+const animalsArr = new Animals(data);
+// console.log(animalsArr);
 
 // 	1. Wyświetl wszystkie rodzaje zwierząt 
-function getAnimalsTypes(arr) {
-    const typesList = [];
-    arr.forEach(animal => typesList.push(animal.type));
-    
-    return typesList.filter((typeItem, index) => typesList.indexOf(typeItem) === index);
+class AnimalTypes extends Animals {
+    constructor(animalsList) {
+        super(animalsList);
+    }
+
+    getTypes() {
+        const typesList = this.animals.map(animal => animal.type);
+        return typesList.filter((typeItem, index) => typesList.indexOf(typeItem) === index);
+    }
 }
+
+const animalTypes = new AnimalTypes(data);
+console.log(animalTypes.getTypes());
+
 
 // 	2. Wyświetl wszystkie występujące rasy zwierząt z danego rodzaju (użytkownik ma mieć możliwość podania rodzaju)
-function getSpecificAnimalsRace(arr, kindName) {
-    const racesList = [];
-    arr.filter(animal => animal.kind === kindName && racesList.push(animal.race))
+// function getSpecificAnimalsRace(arr, kindName) {
+//     const racesList = [];
+//     arr.filter(animal => animal.kind === kindName && racesList.push(animal.race))
 
-    return racesList.filter((raceType, index) => racesList.indexOf(raceType) === index);
-}
+//     return racesList.filter((raceType, index) => racesList.indexOf(raceType) === index);
+// }
 
 // 	3. Wylicz średnią wagę zwierząt danej rasy
-function getAverageWeight(arr, raceName) {
-    const total = 0;
-    const filteredAnimalsArr = arr.filter(animal => animal.race === raceName && (total += animal.weight));
+// function getAverageWeight(arr, raceName) {
+//     const total = 0;
+//     const filteredAnimalsArr = arr.filter(animal => animal.race === raceName && (total += animal.weight));
 
-   return (total / filteredAnimalsArr.length).toFixed(2); 
-}
+//    return (total / filteredAnimalsArr.length).toFixed(2); 
+// }
 
 // 	4. Wylicz średnią długość życia danej rasy
 
@@ -44,30 +60,30 @@ function getAverageWeight(arr, raceName) {
 // 	6. Policz łączną liczbę kończyn danego rodzaju zwierząt 
 
 // 	7. Policz stosunek liczby samców do samic dla danego rodzaju zwierząt
-function getMaleFemaleRatio(arr, typeName) {
-    let malesList = [];
-    let femalesList = [];
-    arr.filter(animal => {
-        if (animal.kind === typeName & animal.sex === 'male') {
-            malesList.push(animal);
-        } else if (animal.kind === typeName & animal.sex === 'female') {
-            femalesList.push(animal);
-        }
-    })
+// function getMaleFemaleRatio(arr, typeName) {
+//     let malesList = [];
+//     let femalesList = [];
+//     arr.filter(animal => {
+//         if (animal.kind === typeName & animal.sex === 'male') {
+//             malesList.push(animal);
+//         } else if (animal.kind === typeName & animal.sex === 'female') {
+//             femalesList.push(animal);
+//         }
+//     })
 
-    let sexRatio = malesList.length * 100 / femalesList.length;
-    return (`${sexRatio.toFixed()} : 100`)
-}
+//     let sexRatio = malesList.length * 100 / femalesList.length;
+//     return (`${sexRatio.toFixed()} : 100`)
+// }
 
 // 	8. Ile metanu wytworzą zwierzęta przez X lat życia
 
 // 	9. Podaj średni wiek zwierząt
-function getAverageAge(arr) {
-    let total = 0;
-    arr.forEach(animal => total += animal.age);
+// function getAverageAge(arr) {
+//     let total = 0;
+//     arr.forEach(animal => total += animal.age);
 
-    return (total / arr.length).toFixed(2); 
-}
+//     return (total / arr.length).toFixed(2); 
+// }
 
 
 

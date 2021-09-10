@@ -19,5 +19,8 @@
   "homepage": "https://github.com/Malgorzata-Niemczyk/js-practice#readme",
   "dependencies": {
     "tsc": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^16.9.1"
   }
 }
