@@ -1,3 +1,5 @@
+
+
 const data = require('./animals.json');
 const metaData = require('./meta-animals.json');
 // console.log(data);
@@ -18,6 +20,72 @@ interface Animal {
     sex: string,
     weight: number,
     age: number  
+}
+
+interface Chicken {
+    [key: string]: {
+        [key: string]: {
+            eggsPerDay: number,
+            averageLifespan: {
+                value: number,
+                unit: string
+            },
+            metanProductionPerDay: {
+                value: number,
+                unit: string
+            }, 
+            feedPerDay: {
+                value: number,
+                unit: string
+            },
+            maturity: {
+                value: number,
+                unit: string
+            }
+        }
+    }
+}
+
+interface Cow {
+    [key: string]: {
+        [key: string]: {
+            feedPerDay: {
+                value: number,
+                unit: string
+            },
+            milkPerDay: {
+                value: number,
+                unit: string
+            },
+            metanProductionPerDay: {
+                value: number,
+                unit: string
+            },
+            maturity: {
+                value: number,
+                unit: string 
+            }
+        }
+    }
+}
+
+interface Pig {
+    [key: string]: {
+        [key: string]: {
+            feedPerDay: {
+                value: number,
+                unit: string
+            }, 
+            metanProductionPerDay: {
+                value: number,
+                unit: string
+            },
+            maturity: {
+                value: number,
+                unit: string 
+            }
+        }
+    }
 }
 
 class Animals { 
@@ -43,7 +111,7 @@ class Animals {
 }
 
 const animalsList = new Animals();
-// console.log(animals)
+// console.log(animalsList)
 
 // 	1. Wyświetl wszystkie rodzaje zwierząt
 animalsList.getTypes();
@@ -80,6 +148,28 @@ function getAverageWeight(raceName: string): number {
 // 	4. Wylicz średnią długość życia danej rasy
 
 // 	5. Policz łączną liczbę kończyn (pomijając skrzydła) zwierząt
+function calculateLimbs() {
+    let chickensList = [];
+    let cowsAndPigsList = [];
+    
+    animalsList.animals.forEach(animal => {
+        switch(animal.kind) {
+            case 'chicken':
+                chickensList.push(animal);
+            break;
+            case 'krowa' || 'świnia':
+                cowsAndPigsList.push(animal);
+            break;
+            default:
+                return [];
+
+        }
+    })
+
+    return (chickensList.length * 2) + (cowsAndPigsList.length * 4);
+}
+
+console.log(calculateLimbs());
 
 // 	6. Policz łączną liczbę kończyn danego rodzaju zwierząt 
 
