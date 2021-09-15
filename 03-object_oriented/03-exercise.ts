@@ -12,7 +12,7 @@ const metaData = require('./meta-animals.json');
 
 // Z danych zawartch w "animals.json" i "meta-animals.json":
 
-interface Animal {
+interface IAnimal {
     id: number,
     kind: string,
     type: string,
@@ -22,179 +22,158 @@ interface Animal {
     age: number  
 }
 
-interface Chicken {
-    [key: string]: {
-        [key: string]: {
-            eggsPerDay: number,
-            averageLifespan: {
-                value: number,
-                unit: string
-            },
-            metanProductionPerDay: {
-                value: number,
-                unit: string
-            }, 
-            feedPerDay: {
-                value: number,
-                unit: string
-            },
-            maturity: {
-                value: number,
-                unit: string
-            }
-        }
-    }
+interface IMetaData {
+    metanProductionPerDay: Object,
+    feedPerDay: Object,
+    maturity: Object
 }
 
-interface Cow {
-    [key: string]: {
-        [key: string]: {
-            feedPerDay: {
-                value: number,
-                unit: string
-            },
-            milkPerDay: {
-                value: number,
-                unit: string
-            },
-            metanProductionPerDay: {
-                value: number,
-                unit: string
-            },
-            maturity: {
-                value: number,
-                unit: string 
-            }
-        }
-    }
+interface IChicken extends IMetaData {
+    eggsPerDay: number,
+    averageLifeSpan: Object
 }
 
-interface Pig {
-    [key: string]: {
-        [key: string]: {
-            feedPerDay: {
-                value: number,
-                unit: string
-            }, 
-            metanProductionPerDay: {
-                value: number,
-                unit: string
-            },
-            maturity: {
-                value: number,
-                unit: string 
-            }
-        }
-    }
+interface ICow extends IMetaData {
+    milkPerDay: Object
 }
 
-class Animals { 
-    animals: Animal[] = data;
-    metaAnimalsData: any = metaData;
 
-    getUniqueValues(itemsArr: string[]) {
+class Animal implements IAnimal { 
+    id: number;
+    kind: string;
+    type: string;
+    race: string;
+    sex: string;
+    weight: number;
+    age: number;
+
+    setAnimals(animalsData: IAnimal[]): IAnimal[] {
+        return animalsData;
+    }
+
+    setMetaAnimalsData(metaAnimalData: IMetaData): IMetaData {
+        return metaAnimalData;
+    }
+
+    getUniqueValues(itemsArr: string[]): string[] {
         return Array.from(new Set(itemsArr));
     }
 
-    getTypes() {
-        const typesList = this.animals.map(animal => animal.type);
-            return this.getUniqueValues(typesList);
-    }
-
-    getTotal(itemsArr: number[]) {
+    getTotal(itemsArr: number[]): number {
         return itemsArr.reduce((a: number, b: number) => a + b);
     }
 
-    getAverage(itemsArr: number[]) {
+    getAverage(itemsArr: number[]): number {
         return this.getTotal(itemsArr) / itemsArr.length;
     }
-}
 
-const animalsList = new Animals();
-// console.log(animalsList)
+    getAllTypes(): string[] {
+        const typesList = this.setAnimals(data).map(animal => animal.type);
+            return this.getUniqueValues(typesList);
+    }
 
-// 	1. Wyświetl wszystkie rodzaje zwierząt
-animalsList.getTypes();
-// console.log(animals.getTypes());
-
-
-// 	2. Wyświetl wszystkie występujące rasy zwierząt z danego rodzaju (użytkownik ma mieć możliwość podania rodzaju)
-class SpecificAnimalsRace {
-    animalsListTwo = new Animals();
-
-    getSpecificRace(kindName: string): string[] {
+    getSpecificRaceList(kindName: string): string[] {
         const racesList: string[] = [];
-        this.animalsListTwo.animals.forEach(animal => animal.kind === kindName && racesList.push(animal.race))
+        this.setAnimals(data).forEach(animal => animal.kind === kindName && racesList.push(animal.race));
             
-        return this.animalsListTwo.getUniqueValues(racesList);
+        return this.getUniqueValues(racesList);
     }   
+
+    getAverageWeightOfSpecificRace(raceName: string): number {
+        let weightsList: number[] = [];
+        this.setAnimals(data).forEach(animal => animal.race === raceName && weightsList.push(animal.weight));
+
+        return this.getAverage(weightsList);
+    }
+
+    calculateLegsOfAllAnimals(): number {
+        let chickensList: object[] = [];
+        let cowsAndPigsList: object[] = [];
+
+        this.setAnimals(data).forEach(animal => {
+            switch (animal.kind) {
+                case 'chicken':
+                    chickensList.push(animal);
+                    break;
+                case 'krowa' || 'świnia':
+                    cowsAndPigsList.push(animal);
+                    break;
+                default:
+                    return [];
+            }
+        })
+
+        return (chickensList.length * 2) + (cowsAndPigsList.length * 4);
+    }
+
+    calculateLegsOfSpecificKind(kindName: string): number {
+        let chosenKindList: object[] = [];
+        this.setAnimals(data).forEach(animal => {
+            if (animal.kind === kindName) {
+                chosenKindList.push(animal);
+            }
+        })
+
+        switch (kindName) {
+            case 'chicken':
+                return chosenKindList.length * 2;
+            case 'krowa' || 'świnia':
+                return chosenKindList.length * 4;
+            default:
+                return;
+        }
+    }
+
+    getMaleFemaleRatio(typeName: string): number {
+        let malesList: object[] = [];
+        let femalesList: object[] = [];
+
+        this.setAnimals(data).forEach(animal => {
+            if (animal.kind === typeName && animal.sex === 'male') {
+                malesList.push(animal);
+            } else if (animal.kind === typeName && animal.sex === 'female') {
+                femalesList.push(animal);
+            }
+        })
+
+        let sexRatio = malesList.length * 100 / femalesList.length;
+        return sexRatio;
+    }
+
+    getAverageAgeOfAllAnimals(): number {
+        let agesList = this.setAnimals(data).map(animal => animal.age);
+        return this.getAverage(agesList);
+    } 
 }
 
-const animalsRace = new SpecificAnimalsRace();
-animalsRace.getSpecificRace('krowa');
-// console.log(animalsRace.getSpecificRace('krowa'));
+const animals = new Animal();
+// console.log(animals.setMetaAnimalsData(metaData)['cow']['mleczna']);
 
-
-// 	3. Wylicz średnią wagę zwierząt danej rasy
-function getAverageWeight(raceName: string): number {
-    let weightsList: number[] = [];
-    animalsList.animals.forEach(animal => animal.race === raceName && weightsList.push(animal.weight));
-
-   return animalsList.getAverage(weightsList);
+class Chicken extends Animal implements IChicken {
+    metanProductionPerDay: Object;
+    feedPerDay: Object;
+    maturity: Object;
+    eggsPerDay: number;
+    averageLifeSpan: Object;
 }
 
-// console.log(getAverageWeight('kokhinhin'))
+// 	1. Wyświetl wszystkie rodzaje zwierząt 
 
-// 	4. Wylicz średnią długość życia danej rasy
+// 	2. Wyświetl wszystkie występujące rasy zwierząt z danego rodzaju (użytkownik ma mieć możliwość podania rodzaju) 
+
+// 	3. Wylicz średnią wagę zwierząt danej rasy 
+
+// 	4. Wylicz średnią długość życia danej rasy **
 
 // 	5. Policz łączną liczbę kończyn (pomijając skrzydła) zwierząt
-function calculateLimbs() {
-    let chickensList = [];
-    let cowsAndPigsList = [];
-    
-    animalsList.animals.forEach(animal => {
-        switch(animal.kind) {
-            case 'chicken':
-                chickensList.push(animal);
-            break;
-            case 'krowa' || 'świnia':
-                cowsAndPigsList.push(animal);
-            break;
-            default:
-                return [];
-
-        }
-    })
-
-    return (chickensList.length * 2) + (cowsAndPigsList.length * 4);
-}
-
-console.log(calculateLimbs());
 
 // 	6. Policz łączną liczbę kończyn danego rodzaju zwierząt 
 
 // 	7. Policz stosunek liczby samców do samic dla danego rodzaju zwierząt
-// function getMaleFemaleRatio(arr, typeName) {
-//     let malesList = [];
-//     let femalesList = [];
-//     arr.filter(animal => {
-//         if (animal.kind === typeName & animal.sex === 'male') {
-//             malesList.push(animal);
-//         } else if (animal.kind === typeName & animal.sex === 'female') {
-//             femalesList.push(animal);
-//         }
-//     })
 
-//     let sexRatio = malesList.length * 100 / femalesList.length;
-//     return (`${sexRatio.toFixed()} : 100`)
-// }
-
-// 	8. Ile metanu wytworzą zwierzęta przez X lat życia
+// 	8. Ile metanu wytworzą zwierzęta przez X lat życia **
 
 // 	9. Podaj średni wiek zwierząt
-let agesList = animalsList.animals.map(animal => animal.age);
-animalsList.getTotal(agesList).toFixed(2);
-// console.log(animalsList.getTotal(agesList).toFixed(2))
 
 
 
