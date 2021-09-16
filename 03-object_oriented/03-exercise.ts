@@ -188,7 +188,7 @@ class Chicken extends Animal implements IChicken {
         return this.getTotal(femalesWeightList);
     }
 
-    getAverageOfAllChickensWeight(): number {
+    getAverageWeightOfAllChickens(): number {
         let chickensWeigthList: number[] = [];
         this.setAnimals(data).forEach(animal => animal.kind === 'chicken' && chickensWeigthList.push(animal.weight));
 
@@ -204,7 +204,7 @@ class Chicken extends Animal implements IChicken {
 }
 
 const chickens = new Chicken();
-console.log(chickens.getAverageOfAllChickensWeight())
+// console.log(chickens.getAverageWeightOfNioski())
 
 // 	1. Ile jaj dziennie dadzą kury nioski
 
