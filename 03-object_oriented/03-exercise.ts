@@ -38,7 +38,7 @@ interface ICow extends IMetaData {
 }
 
 
-class Animal implements IAnimal { 
+class Animal implements IAnimal, IMetaData { 
     id: number;
     kind: string;
     type: string;
@@ -46,6 +46,9 @@ class Animal implements IAnimal {
     sex: string;
     weight: number;
     age: number;
+    metanProductionPerDay: Object;
+    feedPerDay: Object;
+    maturity: Object;
 
     setAnimals(animalsData: IAnimal[]): IAnimal[] {
         return animalsData;
@@ -60,7 +63,7 @@ class Animal implements IAnimal {
     }
 
     getTotal(itemsArr: number[]): number {
-        return itemsArr.reduce((a: number, b: number) => a + b);
+        return itemsArr.reduce((a: number, b: number) => a + b, 0);
     }
 
     getAverage(itemsArr: number[]): number {
@@ -149,14 +152,6 @@ class Animal implements IAnimal {
 const animals = new Animal();
 // console.log(animals.setMetaAnimalsData(metaData)['cow']['mleczna']);
 
-class Chicken extends Animal implements IChicken {
-    metanProductionPerDay: Object;
-    feedPerDay: Object;
-    maturity: Object;
-    eggsPerDay: number;
-    averageLifeSpan: Object;
-}
-
 // 	1. Wyświetl wszystkie rodzaje zwierząt 
 
 // 	2. Wyświetl wszystkie występujące rasy zwierząt z danego rodzaju (użytkownik ma mieć możliwość podania rodzaju) 
@@ -175,7 +170,41 @@ class Chicken extends Animal implements IChicken {
 
 // 	9. Podaj średni wiek zwierząt
 
+class Chicken extends Animal implements IChicken {
+    metanProductionPerDay: Object;
+    feedPerDay: Object;
+    maturity: Object;
+    eggsPerDay: number;
+    averageLifeSpan: Object;
 
+    totalFemalesWeight(): number {
+        let femalesWeightList: number[] = [];
+        this.setAnimals(data).forEach(animal => {
+            if (animal.kind === 'chicken' && animal.sex === 'female') {
+                femalesWeightList.push(animal.weight);
+            }
+        })
+
+        return this.getTotal(femalesWeightList);
+    }
+
+    getAverageOfAllChickensWeight(): number {
+        let chickensWeigthList: number[] = [];
+        this.setAnimals(data).forEach(animal => animal.kind === 'chicken' && chickensWeigthList.push(animal.weight));
+
+        return this.getAverage(chickensWeigthList);
+    }
+
+    getAverageWeightOfNioski(): number {
+        let weightsList: number[] = [];
+        this.setAnimals(data).forEach(animal => animal.type === 'nioska' && weightsList.push(animal.weight));
+
+        return this.getAverage(weightsList);
+    }
+}
+
+const chickens = new Chicken();
+console.log(chickens.getAverageOfAllChickensWeight())
 
 // 	1. Ile jaj dziennie dadzą kury nioski
 
@@ -191,24 +220,7 @@ class Chicken extends Animal implements IChicken {
 
 // 	7. Jaka jest łączna waga wszystkich kur samic
 
-// function totalFemalesWeight(arr) {
-//     let totalWeight = 0;
-//     arr.filter(animal => {
-//         if (animal.kind === 'chicken' && animal.sex === 'female') {
-//             totalWeight += animal.weight;
-//         }
-//     })
-
-//     return (totalWeight).toFixed(2)
-// }
-
 // 	8. Jaka jest średnia waga wszystkich kur
-// function totalChickensWeight(arr) {
-//     let totalWeight = 0;
-//     const chickensList = arr.filter(animal => animal.kind === 'chicken' && (totalWeight += animal.weight));
-    
-//     return (totalWeight / chickensList.length).toFixed(2);
-// }
 
 // 	9. Jaka jest średnia waga kur niosek
 // function getAverageWeightOfNioski(arr) {
