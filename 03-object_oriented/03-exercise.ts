@@ -22,21 +22,25 @@ interface IAnimal {
     age: number  
 }
 
+interface Unit {
+    value: number,
+    unit: string,
+}
+
 interface IMetaData {
-    metanProductionPerDay: Object,
-    feedPerDay: Object,
-    maturity: Object
+    metanProductionPerDay: Unit,
+    feedPerDay: Unit,
+    maturity: Unit
 }
 
 interface IChicken extends IMetaData {
     eggsPerDay: number,
-    averageLifeSpan: Object
+    averageLifeSpan: Unit
 }
 
 interface ICow extends IMetaData {
-    milkPerDay: Object
+    milkPerDay: Unit
 }
-
 
 class Animal implements IAnimal, IMetaData { 
     id: number;
@@ -46,9 +50,9 @@ class Animal implements IAnimal, IMetaData {
     sex: string;
     weight: number;
     age: number;
-    metanProductionPerDay: Object;
-    feedPerDay: Object;
-    maturity: Object;
+    metanProductionPerDay: Unit;
+    feedPerDay: Unit;
+    maturity: Unit;
 
     setAnimals(animalsData: IAnimal[]): IAnimal[] {
         return animalsData;
@@ -147,10 +151,27 @@ class Animal implements IAnimal, IMetaData {
         let agesList = this.setAnimals(data).map(animal => animal.age);
         return this.getAverage(agesList);
     } 
+
+    getMetanProductionInGivenNumsOfYears(givenNumOfYears: number): number {
+        let metanProductionList: Unit[] = [];
+
+        Object.values(this.setMetaAnimalsData(metaData)).forEach(item => {
+            for (let value in item) {
+                metanProductionList.push(item[value].metanProductionPerDay);
+            }
+        })
+
+        let formattedMetanProductionValue = metanProductionList.map(item => 
+            item.unit === 'g' ? item.value / 1000 : item.value
+        )
+
+        return this.getTotal(formattedMetanProductionValue) * givenNumOfYears;
+    }
 }
 
 const animals = new Animal();
 // console.log(animals.setMetaAnimalsData(metaData)['cow']['mleczna']);
+// console.log(animals.getMetanProductionInGivenNumsOfYears(20))
 
 // 	1. Wyświetl wszystkie rodzaje zwierząt 
 
@@ -166,16 +187,16 @@ const animals = new Animal();
 
 // 	7. Policz stosunek liczby samców do samic dla danego rodzaju zwierząt
 
-// 	8. Ile metanu wytworzą zwierzęta przez X lat życia **
+// 	8. Ile metanu wytworzą zwierzęta przez X lat życia
 
 // 	9. Podaj średni wiek zwierząt
 
 class Chicken extends Animal implements IChicken {
-    metanProductionPerDay: Object;
-    feedPerDay: Object;
-    maturity: Object;
+    metanProductionPerDay: Unit;
+    feedPerDay: Unit;
+    maturity: Unit;
     eggsPerDay: number;
-    averageLifeSpan: Object;
+    averageLifeSpan: Unit;
 
     totalFemalesWeight(): number {
         let femalesWeightList: number[] = [];
