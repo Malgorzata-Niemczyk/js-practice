@@ -33,16 +33,16 @@ interface IMetaData {
     maturity: Unit
 }
 
-interface IChicken extends IMetaData {
+interface IChickenMetaData extends IMetaData {
     eggsPerDay: number,
     averageLifeSpan: Unit
 }
 
-interface ICow extends IMetaData {
+interface ICowMetaData extends IMetaData {
     milkPerDay: Unit
 }
 
-class Animal implements IAnimal, IMetaData { 
+class AnimalItem implements IAnimal, IMetaData { 
     id: number;
     kind: string;
     type: string;
@@ -169,7 +169,7 @@ class Animal implements IAnimal, IMetaData {
     }
 }
 
-const animals = new Animal();
+const animals = new AnimalItem();
 // console.log(animals.setMetaAnimalsData(metaData)['cow']['mleczna']);
 // console.log(animals.getMetanProductionInGivenNumsOfYears(20))
 
@@ -191,7 +191,7 @@ const animals = new Animal();
 
 // 	9. Podaj średni wiek zwierząt
 
-class Chicken extends Animal implements IChicken {
+class ChickenItem extends AnimalItem implements IChickenMetaData {
     metanProductionPerDay: Unit;
     feedPerDay: Unit;
     maturity: Unit;
@@ -224,7 +224,7 @@ class Chicken extends Animal implements IChicken {
     }
 }
 
-const chickens = new Chicken();
+const chickens = new ChickenItem();
 // console.log(chickens.getAverageWeightOfNioski())
 
 // 	1. Ile jaj dziennie dadzą kury nioski
@@ -306,3 +306,31 @@ const chickens = new Chicken();
 // 	4. Jaka jest łączna waga macior
 
 // 	5. Ile świń nie osiągneło dojrzałości płciowej
+
+interface MIlkGiver {
+    milkPerDay: Unit;
+    getMilkInDays: (days: number) => Unit;
+}
+
+class Animal implements IAnimal, IMetaData {}
+
+class Chicken extends Animal implements IChickenMetaData {}
+
+abstract class Cow extends Animal implements ICowMetaData {
+    abstract getMilkInDays(days: number): Unit;
+}
+class Pig extends Animal {};
+
+ class AnimalsManager {
+     animals: Array<Animal>;
+
+    constructor(animalsData: Array<IAnimal>, animalMetadata: Array<IMetaData>) {
+        this.animals = this.createAnimalsFormData(animalsData, animalMetadata);
+    }
+    createAnimalsFormData(animalsData: Array<IAnimal>, animalMetadata: Array<IMetaData>): Array<Animal> {
+        return [];
+    }
+
+    // getMilkByDays(days: number): Unit;
+}
+const animalManager = new AnimalsManager(data, metaData);
