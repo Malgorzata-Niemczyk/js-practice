@@ -42,7 +42,7 @@ interface ICowMetaData extends IMetaData {
     milkPerDay: Unit
 }
 
-class AnimalItem implements IAnimal, IMetaData { 
+class Animal implements IAnimal, IMetaData { 
     id: number;
     kind: string;
     type: string;
@@ -53,42 +53,48 @@ class AnimalItem implements IAnimal, IMetaData {
     metanProductionPerDay: Unit;
     feedPerDay: Unit;
     maturity: Unit;
+}
 
-    setAnimals(animalsData: IAnimal[]): IAnimal[] {
-        return animalsData;
+class AnimalsManager {
+    animals: Array<Animal>;
+
+    constructor(animalsData: Array<IAnimal>, animalMetadata: Array<IMetaData>) {
+       this.animals = this.createAnimalsFromData(animalsData, animalMetadata);
+    }
+    
+    createAnimalsFromData(animalsData: Array<IAnimal>, animalMetadata: Array<IMetaData>): Array<Animal> {
+        return [];
     }
 
-    setMetaAnimalsData(metaAnimalData: IMetaData): IMetaData {
-        return metaAnimalData;
+   getUniqueValues(itemsArr: string[]): string[] {
+    return Array.from(new Set(itemsArr));
     }
 
-    getUniqueValues(itemsArr: string[]): string[] {
-        return Array.from(new Set(itemsArr));
-    }
-
-    getTotal(itemsArr: number[]): number {
+    getSum(itemsArr: number[]): number {
         return itemsArr.reduce((a: number, b: number) => a + b, 0);
     }
 
     getAverage(itemsArr: number[]): number {
-        return this.getTotal(itemsArr) / itemsArr.length;
+        return this.getSum(itemsArr) / itemsArr.length;
     }
 
     getAllTypes(): string[] {
-        const typesList = this.setAnimals(data).map(animal => animal.type);
-            return this.getUniqueValues(typesList);
+        const typesList = this.animals.map(animal => animal.type);
+        return this.getUniqueValues(typesList);
     }
 
     getSpecificRaceList(kindName: string): string[] {
-        const racesList: string[] = [];
-        this.setAnimals(data).forEach(animal => animal.kind === kindName && racesList.push(animal.race));
-            
+        const racesList: string[] = this.animals
+            .filter(animal => animal.kind === kindName)
+            .map(filteredAnimal => filteredAnimal.race)
+
         return this.getUniqueValues(racesList);
-    }   
+    }
 
     getAverageWeightOfSpecificRace(raceName: string): number {
-        let weightsList: number[] = [];
-        this.setAnimals(data).forEach(animal => animal.race === raceName && weightsList.push(animal.weight));
+        let weightsList: number[] = this.animals
+            .filter(animal => animal.race === raceName)
+            .map(filteredAnimal => filteredAnimal.weight)
 
         return this.getAverage(weightsList);
     }
@@ -97,7 +103,7 @@ class AnimalItem implements IAnimal, IMetaData {
         let chickensList: object[] = [];
         let cowsAndPigsList: object[] = [];
 
-        this.setAnimals(data).forEach(animal => {
+        this.animals.forEach(animal => {
             switch (animal.kind) {
                 case 'chicken':
                     chickensList.push(animal);
@@ -114,12 +120,9 @@ class AnimalItem implements IAnimal, IMetaData {
     }
 
     calculateLegsOfSpecificKind(kindName: string): number {
-        let chosenKindList: object[] = [];
-        this.setAnimals(data).forEach(animal => {
-            if (animal.kind === kindName) {
-                chosenKindList.push(animal);
-            }
-        })
+        let chosenKindList: object[] = this.animals
+            .filter(animal => animal.kind === kindName)
+            .map(filteredAnimal => filteredAnimal)
 
         switch (kindName) {
             case 'chicken':
@@ -135,7 +138,7 @@ class AnimalItem implements IAnimal, IMetaData {
         let malesList: object[] = [];
         let femalesList: object[] = [];
 
-        this.setAnimals(data).forEach(animal => {
+        this.animals.forEach(animal => {
             if (animal.kind === typeName && animal.sex === 'male') {
                 malesList.push(animal);
             } else if (animal.kind === typeName && animal.sex === 'female') {
@@ -148,30 +151,28 @@ class AnimalItem implements IAnimal, IMetaData {
     }
 
     getAverageAgeOfAllAnimals(): number {
-        let agesList = this.setAnimals(data).map(animal => animal.age);
+        let agesList = this.animals.map(animal => animal.age);
         return this.getAverage(agesList);
-    } 
+    }
 
     getMetanProductionInGivenNumsOfYears(givenNumOfYears: number): number {
         let metanProductionList: Unit[] = [];
 
-        Object.values(this.setMetaAnimalsData(metaData)).forEach(item => {
+        Object.values(this.animals).forEach(item => {
             for (let value in item) {
                 metanProductionList.push(item[value].metanProductionPerDay);
             }
         })
 
-        let formattedMetanProductionValue = metanProductionList.map(item => 
+        let formattedMetanProductionValue = metanProductionList.map(item =>
             item.unit === 'g' ? item.value / 1000 : item.value
         )
 
-        return this.getTotal(formattedMetanProductionValue) * givenNumOfYears;
+        return this.getSum(formattedMetanProductionValue) * givenNumOfYears;
     }
 }
-
-const animals = new AnimalItem();
-// console.log(animals.setMetaAnimalsData(metaData)['cow']['mleczna']);
-// console.log(animals.getMetanProductionInGivenNumsOfYears(20))
+const animalsManager = new AnimalsManager(data, metaData);
+console.log(animalsManager.animals)
 
 // 	1. Wyświetl wszystkie rodzaje zwierząt 
 
@@ -191,7 +192,7 @@ const animals = new AnimalItem();
 
 // 	9. Podaj średni wiek zwierząt
 
-class ChickenItem extends AnimalItem implements IChickenMetaData {
+class ChickenItem extends Animal implements IChickenMetaData {
     metanProductionPerDay: Unit;
     feedPerDay: Unit;
     maturity: Unit;
